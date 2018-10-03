@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@drawable/ic_settings_black_24dp"
+            android:text="7dp"
+            android:title="SETTINGS" />
+        <item
+            android:id="@+id/nav_gallery"
+            android:icon="@drawable/ic_toc_black_24dp"
+            android:text="7dp"
+            android:title="MY RECORD" />
+        <item
+            android:id="@+id/nav_status"
+            android:icon="@drawable/ic_add_black_24dp"
+            android:text="7dp"
+            android:title="MY STATUS" />
+    </group>
+
+    <item android:title="OTHERS">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/ic_place_black_24dp"
+                android:text="7dp"
+                android:title="FIND US" />
+            <item
+                android:id="@+id/nav_admin"
+                android:icon="@drawable/ic_people_black_24dp"
+                android:text="7dp"
+                android:title="ADMIN PORTAL" />
+
+            <item
+                android:id="@+id/nav_contact"
+                android:icon="@drawable/ic_phone_android_black_24dp"
+                android:text="7dp"
+                android:title="CONTACT US" />
+        </menu>
+    </item>
+
+</menu>

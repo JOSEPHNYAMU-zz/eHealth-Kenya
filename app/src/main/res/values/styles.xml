@@ -1,0 +1,67 @@
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="error">
+        <item name="textBold">true</item>
+        <item name="textColor">#ffffff</item>
+        <item name="textSize">15sp</item>
+        <item name="colorBackground">#d62220</item>
+        <item name="solidBackground">true</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="strokeColor">#fff</item>
+        <item name="iconStart">@drawable/ic_error_black_24dp</item>
+        <item name="length">LONG</item>
+        <item name="gravity">center</item>
+        <item name="radius">5dp</item>
+    </style>
+
+    <style name="information">
+        <item name="textBold">true</item>
+        <item name="textColor">#ffffff</item>
+        <item name="textSize">15sp</item>
+        <item name="colorBackground">#4d9ab7</item>
+        <item name="solidBackground">true</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="strokeColor">#fff</item>
+        <item name="iconStart">@drawable/ic_info_black_24dp</item>
+        <item name="length">LONG</item>
+        <item name="gravity">center</item>
+        <item name="radius">5dp</item>
+    </style>
+
+    <style name="success">
+        <item name="textBold">true</item>
+        <item name="textColor">#ffffff</item>
+        <item name="textSize">15sp</item>
+        <item name="colorBackground">#008000</item>
+        <item name="solidBackground">true</item>
+        <item name="strokeWidth">3dp</item>
+        <item name="strokeColor">#fff</item>
+        <item name="iconStart">@drawable/ic_done_black_24dp</item>
+        <item name="length">LONG</item>
+        <item name="gravity">top</item>
+        <item name="radius">5dp</item>
+    </style>
+
+    <style name="MyMaterialTheme" parent="MyMaterialTheme.Base">
+
+    </style>
+
+    <style name="MyMaterialTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:paddingBottom">4dp</item>
+    </style>
+</resources>

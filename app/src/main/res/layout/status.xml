@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="360dp"
+    android:layout_height="170dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/textColor"
+    android:padding="10dp"
+    android:layout_gravity="center">
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/status_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:iconSignifier="@drawable/ic_done_all_black_24dp"
+                app:primaryColor="#000000"
+                app:secondaryColor="#9e9e9e"
+                android:layout_marginBottom="13dp"
+                app:useDenseSpacing="true"
+                app:panelBackgroundColor="#ffffff"
+                app:labelText="@string/status">
+
+                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                    android:id="@+id/status_text"
+                    android:layout_width="match_parent"
+                    android:maxLength="50"
+                    android:inputType="textNoSuggestions"
+                    android:layout_height="wrap_content" />
+            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:id="@+id/close_status"
+                    style="?android:textAppearanceSmall"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="right"
+                    android:textColor="@color/textColor"
+                    android:text="@string/action_cancel"
+                    android:background="@drawable/cancel"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true" />
+
+
+                <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                    android:id="@+id/update_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    app:spinning_bar_width="4dp"
+                    app:spinning_bar_color="#FFF"
+                    app:spinning_bar_padding="6dp"
+                    style="?android:textAppearanceSmall"
+                    android:layout_marginTop="15dp"
+                    android:layout_gravity="right"
+                    android:textColor="@color/textColor"
+                    android:text="@string/action_status"
+                    android:textStyle="bold"
+                    android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="350dp"
+    android:layout_height="540dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/textColor"
+    android:padding="6dp"
+    android:layout_gravity="center">
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/sign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:drawableStart="@drawable/ic_mode_edit_black_24dp"
+                android:drawablePadding="10dp"
+                android:textColor="@color/textColor"
+                android:background="@color/blackColor"
+                android:layout_marginBottom="15dp"
+                android:textStyle="bold"
+                android:text="ACCOUNT SET UP" />
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/profile_picture"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
+                android:src="@drawable/user"
+                app:civ_border_color="#000000"
+                app:civ_border_width="1dp"
+                app:civ_shadow="true"
+                android:layout_gravity="center"
+                app:civ_shadow_radius="5"
+                app:civ_shadow_color="#8BC34A"/>
+
+
+
+            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/phone_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:iconSignifier="@drawable/ic_phone_android_black_24dp"
+                app:primaryColor="#000000"
+                app:secondaryColor="#9e9e9e"
+                app:useDenseSpacing="true"
+                app:panelBackgroundColor="#ffffff"
+                app:labelText="Phone No">
+
+                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                    android:id="@+id/phone"
+                    android:layout_width="match_parent"
+                    android:inputType="phone"
+                    android:layout_height="wrap_content" />
+
+            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/location_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:iconSignifier="@drawable/ic_place_black_24dp"
+                app:primaryColor="#000000"
+                app:secondaryColor="#9e9e9e"
+                android:layout_marginBottom="15dp"
+                app:useDenseSpacing="true"
+                app:panelBackgroundColor="#ffffff"
+                app:labelText="Location">
+
+                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:inputType="text"
+                    android:layout_height="wrap_content" />
+
+            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/age_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:iconSignifier="@drawable/ic_person_black_24dp"
+                app:primaryColor="#000000"
+                app:secondaryColor="#9e9e9e"
+                android:layout_marginBottom="15dp"
+                app:useDenseSpacing="true"
+                app:panelBackgroundColor="#ffffff"
+                app:labelText="Age (Yrs)">
+
+                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                    android:id="@+id/age"
+                    android:layout_width="match_parent"
+                    android:inputType="number"
+                    android:layout_height="wrap_content" />
+
+            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+            <io.ghyeok.stickyswitch.widget.StickySwitch
+                android:id="@+id/gender"
+                android:layout_width="wrap_content"
+                android:layout_height="90dp"
+                android:layout_centerInParent="true"
+                app:ss_animationDuration="600"
+                app:ss_iconPadding="11dp"
+                app:ss_iconSize="22dp"
+                app:ss_leftIcon="@drawable/male"
+                app:ss_leftText="Male"
+                app:ss_rightIcon="@drawable/female"
+                android:layout_marginRight="5dp"
+                app:ss_rightText="Female"
+                app:ss_selectedTextSize="13sp"
+                android:layout_gravity="right"
+                app:ss_sliderBackgroundColor="@color/colorPrimary"
+                app:ss_switchColor="@color/blackColor"
+                app:ss_textColor="@color/black"
+                app:ss_textSize="12sp"
+                app:ss_animationType="curved"/>
+
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout1"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                    android:id="@+id/update_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    app:spinning_bar_width="4dp"
+                    app:spinning_bar_color="#FFF"
+                    app:spinning_bar_padding="6dp"
+                    style="?android:textAppearanceSmall"
+                    android:layout_marginTop="1dp"
+                    android:layout_gravity="right"
+                    android:textColor="@color/textColor"
+                    android:text="@string/action_complete"
+                    android:textStyle="bold"
+                    android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

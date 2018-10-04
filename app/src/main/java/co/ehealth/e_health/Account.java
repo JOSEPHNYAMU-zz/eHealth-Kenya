@@ -69,7 +69,6 @@ public class Account extends AppCompatActivity {
         progress = new ProgressDialog(this);
         line = (ImageView) findViewById(R.id.iline);
 
-
         eLoginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,8 +77,6 @@ public class Account extends AppCompatActivity {
 
             }
         });
-
-
 
         eAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -104,7 +101,6 @@ public class Account extends AppCompatActivity {
         super.onStart();
         eAuth.addAuthStateListener(eAuthListener);
     }
-
 
     public void showRegister(View v) {
 
@@ -134,7 +130,6 @@ public class Account extends AppCompatActivity {
         registerDialog.show();
         line.setVisibility(View.GONE);
         registerButton.setVisibility(View.GONE);
-
 
         makeAccount.setOnClickListener(new OnClickListener() {
             @Override
@@ -396,7 +391,6 @@ public class Account extends AppCompatActivity {
         });
 
     }
-
 
     private boolean isPasswordValid(String password) {
         return password.length() < 6;

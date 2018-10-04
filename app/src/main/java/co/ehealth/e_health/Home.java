@@ -116,11 +116,9 @@ public class Home extends AppCompatActivity
 
                 if (firebaseAuth.getCurrentUser() == null) {
 
-                    logout();
-
-                    Intent accountIntent = new Intent(Home.this, Account.class);
-                    accountIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(accountIntent);
+                        Intent accountIntent = new Intent(Home.this, Account.class);
+                        accountIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(accountIntent);
 
                 }
             }
@@ -248,29 +246,15 @@ public class Home extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-
-    private void logout() {
-
-        eAuth.signOut();
-
-    }
-
     private void checkUserExist() {
-
-        final String user_id = eAuth.getCurrentUser().getUid();
 
         eDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if(!dataSnapshot.hasChild(user_id)) {
+                if(!dataSnapshot.hasChild(userId)) {
 
-                    Intent accountIntent = new Intent(Home.this, Account.class);
-
-                    accountIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                    startActivity(accountIntent);
-
+                    logout();
 
                 }
 
@@ -530,6 +514,7 @@ public class Home extends AppCompatActivity
                     StyleableToast.makeText(Home.this, "Status Successfully Updated", Toast.LENGTH_LONG, R.style.success).show();
 
                     saveStatus.revertAnimation();
+                    statusDialog.show();
 
 
                 } else {
@@ -553,6 +538,15 @@ public class Home extends AppCompatActivity
         });
 
 
+    }
+
+
+    private void logout() {
+
+        eAuth.signOut();
+        Intent accountIntent = new Intent(Home.this, Account.class);
+        accountIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(accountIntent);
     }
 
 }

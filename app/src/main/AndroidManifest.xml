@@ -32,15 +32,12 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Admin"
-            android:label="@string/title_activity_admin"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".Settings"
             android:label="@string/title_activity_settings" />
         <activity
             android:name=".settingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
+        <activity android:name=".Admin"></activity>
     </application>
 
 </manifest>

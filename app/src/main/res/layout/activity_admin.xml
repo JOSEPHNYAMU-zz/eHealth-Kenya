@@ -2,90 +2,45 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context=".Admin">
 
-
-
-
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-
-            <android.support.design.widget.TabLayout
-                android:id="@+id/tabs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:tabIndicatorHeight="8dp"
-                app:tabMode="fixed"
-                app:tabGravity="fill"/>
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
-
-
-
-
-
-
-
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/appbar_padding_top"
+        app:elevation="0dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:layout_weight="1"
             android:background="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|enterAlways"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="ADMIN PANEL">
-
-        </android.support.v7.widget.Toolbar>
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </android.support.design.widget.AppBarLayout>
 
+    <include layout="@layout/content_home" />
 
-    <android.support.design.widget.AppBarLayout
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:layout_height="match_parent">
 
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:tabIndicatorHeight="8dp"
-            app:tabMode="fixed"
-            app:tabGravity="fill"/>
-    </android.support.design.widget.AppBarLayout>
+            android:layout_gravity="bottom|right"
+            android:layout_marginBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/ic_add"
+            fab:fab_colorNormal="@color/colorPrimary"
+            fab:fab_colorPressed="@color/colorAccent"
+            fab:fab_colorRipple="@color/blackColor"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"  />
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+    </FrameLayout>
 
 </android.support.design.widget.CoordinatorLayout>

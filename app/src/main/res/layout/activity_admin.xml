@@ -36,7 +36,7 @@
             android:layout_gravity="bottom|right"
             android:layout_marginBottom="8dp"
             android:layout_marginRight="8dp"
-            android:src="@drawable/ic_add"
+            android:src="@drawable/ic_bullet"
             fab:fab_colorNormal="@color/colorPrimary"
             fab:fab_colorPressed="@color/colorAccent"
             fab:fab_colorRipple="@color/blackColor"/>

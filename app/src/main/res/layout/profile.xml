@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="350dp"
+    android:layout_width="370dp"
     android:layout_height="540dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/textColor"
@@ -18,8 +18,39 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <RelativeLayout
+                android:id="@+id/top_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/xx"
+                    android:layout_width="300dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="15dp"
+                    android:background="@color/blackColor"
+                    android:drawablePadding="10dp"
+                    android:drawableStart="@drawable/ic_mode_edit_black_24dp"
+                    android:padding="8dp"
+                    android:text="UPDATE PROFILE"
+                    android:textColor="@color/textColor"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/close_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:background="@color/colorRed"
+                    android:drawableStart="@drawable/ic_power_settings_new_black_24dp"
+                    android:padding="8dp"
+                    android:scrollHorizontally="false"
+                    android:textSize="10dp" />
+            </RelativeLayout>
+
+
             <TextView
-                android:id="@+id/sign"
+                android:id="@+id/top_one"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"

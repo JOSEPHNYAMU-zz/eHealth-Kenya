@@ -37,7 +37,11 @@
         <activity
             android:name=".settingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".Admin"></activity>
+        <activity android:name=".Admin" />
+        <activity
+            android:name=".Test"
+            android:label="@string/title_activity_test"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

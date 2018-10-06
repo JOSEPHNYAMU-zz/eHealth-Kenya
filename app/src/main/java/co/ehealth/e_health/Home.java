@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -29,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -47,6 +49,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.muddzdev.styleabletoast.StyleableToast;
+import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
@@ -61,18 +64,23 @@ public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth eAuth;
-    Dialog profileDialog, statusDialog;
+    Dialog profileDialog, statusDialog, newRecord;
     private FirebaseAuth.AuthStateListener eAuthListener;
     DatabaseReference eDatabase = FirebaseDatabase.getInstance()
             .getReference().child("Users");
     public static final int GALLERY_REQUEST = 1;
-    private CircularImageView circularImageView;
+    public static final int GALLERY_REQUEST_RECORD = 1;
+    private CircularImageView circularImageView, userImage;
     private Uri eImageUri = null;
-    private StorageReference eImageStore;
+    private Uri eRecordUri = null;
+    private StorageReference eImageStore, eRecordStore;
     private TabLayout tabLayout;
     private ViewPager viewPager;
     String userId = null;
     private AutoCompleteTextView StatusEdit;
+    private ImageView recordImage;
+    DatabaseReference eRecordDatabase = FirebaseDatabase.getInstance()
+            .getReference().child("Records");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,15 +91,19 @@ public class Home extends AppCompatActivity
         getSupportActionBar().setTitle("eHealth");
         eAuth = FirebaseAuth.getInstance();
         eDatabase.keepSynced(true);
+        eRecordDatabase.keepSynced(true);
         profileDialog = new Dialog(this);
         profileDialog.setContentView(R.layout.profile);
+        newRecord = new Dialog(this);
+        newRecord.setContentView(R.layout.record);
         statusDialog = new Dialog(this);
         statusDialog.setContentView(R.layout.status);
         circularImageView = (CircularImageView) profileDialog.findViewById(R.id.profile_picture);
         eImageStore = FirebaseStorage.getInstance().getReference().child("Profiles");
+        eRecordStore = FirebaseStorage.getInstance().getReference().child("Records");
         userId = eAuth.getCurrentUser().getUid();
         StatusEdit = (AutoCompleteTextView) statusDialog.findViewById(R.id.status_text);
-
+        eRecordDatabase.keepSynced(true);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -103,6 +115,7 @@ public class Home extends AppCompatActivity
         View headerView = navigationView.getHeaderView(0);
         final TextView Name = (TextView) headerView.findViewById(R.id.user_name);
         final TextView Status = (TextView) headerView.findViewById(R.id.status);
+        userImage = (CircularImageView) headerView.findViewById(R.id.user_image);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -133,10 +146,21 @@ public class Home extends AppCompatActivity
                 Status.setText(dataSnapshot.child("Status").getValue().toString());
                 Name.setText(fullname);
                 StatusEdit.setText(dataSnapshot.child("Status").getValue().toString());
+                Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).into(userImage);
+
+                View One, Two;
+                One = (View) profileDialog.findViewById(R.id.top_one);
+                Two = (View) profileDialog.findViewById(R.id.top_two);
 
                 if(!dataSnapshot.child("Phone").exists()) {
 
+                    Two.setVisibility(View.GONE);
+
                     showProfile();
+
+                } else {
+
+                    One.setVisibility(View.GONE);
                 }
 
             }
@@ -146,6 +170,9 @@ public class Home extends AppCompatActivity
 
             }
         });
+
+
+        recordImage = (ImageView) newRecord.findViewById(R.id.recordPicture);
 
     }
 
@@ -234,7 +261,42 @@ public class Home extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            return true;
+
+            final AutoCompleteTextView Phone, Location, Age;
+            final Button cancelRegistration;
+            Phone = (AutoCompleteTextView) profileDialog.findViewById(R.id.phone);
+            Location = (AutoCompleteTextView) profileDialog.findViewById(R.id.location);
+            Age = (AutoCompleteTextView) profileDialog.findViewById(R.id.age);
+
+            eDatabase.child(userId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Phone.setText(dataSnapshot.child("Phone").getValue().toString());
+                    Location.setText(dataSnapshot.child("Location").getValue().toString());
+                    Age.setText(dataSnapshot.child("Age").getValue().toString());
+                    final CircularImageView circularImageView = (CircularImageView) profileDialog.findViewById(R.id.profile_picture);
+                    Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).into(circularImageView);
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            final CircularProgressButton updateData = (CircularProgressButton) profileDialog.findViewById(R.id.update_profile);
+            updateData.setText("UPDATE PROFILE");
+
+            showProfile();
+
+        }
+
+        if (id == R.id.action_new) {
+
+            newRecord();
+
         }
 
         if(item.getItemId() == R.id.action_logout) {
@@ -244,6 +306,84 @@ public class Home extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void newRecord() {
+
+
+        newRecord.show();
+
+        final AutoCompleteTextView descInput = (AutoCompleteTextView) newRecord.findViewById(R.id.description);
+        final CircularProgressButton addRecord = (CircularProgressButton) newRecord.findViewById(R.id.addNewRecord);
+        final TextView closeRecord = (TextView) newRecord.findViewById(R.id.close_record);
+        final String desc = descInput.getText().toString().trim();
+
+        closeRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                newRecord.dismiss();
+
+            }
+        });
+
+        recordImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                galleryIntent.setType("image/*");
+                startActivityForResult(galleryIntent, GALLERY_REQUEST_RECORD);
+            }
+        });
+
+
+        addRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(eRecordUri != null) {
+
+                    addRecord.startAnimation();
+
+                    final StorageReference filePath = eRecordStore.child(eRecordUri.getLastPathSegment());
+                    filePath.putFile(eRecordUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                            filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+
+                                    final DatabaseReference newRec = eRecordDatabase.child(userId).push();
+                                    newRec.child("description").setValue(desc);
+                                    newRec.child("image").setValue(uri.toString());
+
+                                    addRecord.revertAnimation();
+
+                                    descInput.setText("");
+
+                                    recordImage.setBackgroundResource(R.drawable.placeholder);
+
+                                    StyleableToast.makeText(Home.this, "Record Successfully Submitted", Toast.LENGTH_LONG, R.style.success).show();
+
+                                }
+                            });
+
+                        }
+                    });
+
+
+                } else {
+
+                    StyleableToast.makeText(Home.this, "Please Upload Doctors Prescription Screenshot", Toast.LENGTH_LONG, R.style.information).show();
+
+                }
+
+
+            }
+        });
+
     }
 
     private void checkUserExist() {
@@ -307,7 +447,7 @@ public class Home extends AppCompatActivity
 
         final AutoCompleteTextView Phone, Location, Age;
 
-        final Button cancelRegistration;
+        final TextView cancelRegistration;
 
         Phone = (AutoCompleteTextView) profileDialog.findViewById(R.id.phone);
         Location = (AutoCompleteTextView) profileDialog.findViewById(R.id.location);
@@ -340,16 +480,15 @@ public class Home extends AppCompatActivity
         });
 
 
-//        cancelRegistration = (Button) profileDialog.findViewById(R.id.close_dialog);
-//
-//        cancelRegistration.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                registerDialog.dismiss();
-//            }
-//        });
+        cancelRegistration = (TextView) profileDialog.findViewById(R.id.close_profile);
 
-//
+        cancelRegistration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                profileDialog.dismiss();
+            }
+        });
+
         profileDialog.setCanceledOnTouchOutside(false);
         profileDialog.show();
 
@@ -386,23 +525,28 @@ public class Home extends AppCompatActivity
 
                             updateData.startAnimation();
 
-                            StorageReference filePath = eImageStore.child(eImageUri.getLastPathSegment());
+                            final StorageReference filePath = eImageStore.child(eImageUri.getLastPathSegment());
 
                             filePath.putFile(eImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                    String downloadUri = eImageStore.getDownloadUrl().toString();
+                                    filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
 
-                                    eDatabase.child(userId).child("Phone").setValue(phone);
-                                    eDatabase.child(userId).child("Location").setValue(location);
-                                    eDatabase.child(userId).child("Age").setValue(age);
-                                    eDatabase.child(userId).child("Gender").setValue(gender);
-                                    eDatabase.child(userId).child("Image").setValue(downloadUri);
+                                            eDatabase.child(userId).child("Phone").setValue(phone);
+                                            eDatabase.child(userId).child("Location").setValue(location);
+                                            eDatabase.child(userId).child("Age").setValue(age);
+                                            eDatabase.child(userId).child("Gender").setValue(gender);
+                                            eDatabase.child(userId).child("Image").setValue(uri.toString());
 
-                                    updateData.revertAnimation();
-                                    profileDialog.dismiss();
-                                    StyleableToast.makeText(Home.this, "Profile completed, Welcome to eHealth", Toast.LENGTH_LONG, R.style.success).show();
+                                            updateData.revertAnimation();
+                                            profileDialog.dismiss();
+                                            StyleableToast.makeText(Home.this, "Profile completed, Welcome to eHealth", Toast.LENGTH_LONG, R.style.success).show();
+
+                                        }
+                                    });
 
                                 }
                             });
@@ -411,7 +555,7 @@ public class Home extends AppCompatActivity
 
                     } else {
 
-                        StyleableToast.makeText(Home.this, "Please upload profile Image", Toast.LENGTH_LONG, R.style.error).show();
+                        StyleableToast.makeText(Home.this, "Please upload profile ic_placeholder_image", Toast.LENGTH_LONG, R.style.error).show();
 
                     }
 
@@ -471,6 +615,13 @@ public class Home extends AppCompatActivity
                     .start(this);
         }
 
+
+        if(requestCode == GALLERY_REQUEST_RECORD && resultCode == RESULT_OK) {
+
+            Uri imageUri = data.getData();
+        }
+
+
         if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
 
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
@@ -478,6 +629,9 @@ public class Home extends AppCompatActivity
             if(resultCode == RESULT_OK) {
 
                 eImageUri = result.getUri();
+                eRecordUri = result.getUri();
+
+                recordImage.setImageURI(eRecordUri);
 
                 circularImageView.setImageURI(eImageUri);
 

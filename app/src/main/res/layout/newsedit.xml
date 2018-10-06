@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="370dp"
+    android:layout_height="540dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/textColor"
+    android:padding="6dp"
+    android:layout_gravity="center">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/sign"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:background="@color/blackColor"
+            android:drawablePadding="10dp"
+            android:drawableStart="@drawable/ic_bullet"
+            android:padding="8dp"
+            android:text="ADD NEWS"
+            android:textColor="@color/textColor"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/close_news"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/colorRed"
+            android:drawableStart="@drawable/ic_power_settings_new_black_24dp"
+            android:padding="8dp"
+            android:scrollHorizontally="false"
+            android:textSize="10dp" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_marginTop="50dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/blogImage"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="30dp"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:layout_height="220dp"
+                app:srcCompat="@drawable/placeholder" />
+
+            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/title_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textinputs"
+                app:labelText="Title"
+                app:panelBackgroundColor="#ffffff"
+                android:layout_marginBottom="30dp"
+                app:primaryColor="#000000"
+                app:secondaryColor="#9e9e9e"
+                app:useDenseSpacing="true">
+
+                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                    android:id="@+id/title_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textNoSuggestions" />
+
+            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+
+
+            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
+                android:id="@+id/body_edit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="35dp"
+                android:background="@drawable/textinputs"
+                app:labelText="Body"
+                app:panelBackgroundColor="#ffffff"
+                app:primaryColor="#000000"
+                app:secondaryColor="#9e9e9e"
+                app:useDenseSpacing="true">
+
+                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
+                    android:id="@+id/body"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:singleLine="false"
+                    android:inputType="textMultiLine" />
+
+            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+        </LinearLayout>
+    </ScrollView>
+    <RelativeLayout
+        android:id="@+id/relativeLayout1"
+        android:layout_width="fill_parent"
+        android:layout_marginTop="480dp"
+        android:layout_height="wrap_content">
+
+        <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+            android:id="@+id/addNews"
+            style="?android:textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="right"
+            android:layout_marginTop="1dp"
+            android:background="@drawable/button"
+            android:text="ADD NEWS ITEM"
+            android:textColor="@color/textColor"
+            android:textStyle="bold"
+            app:spinning_bar_color="#FFF"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_width="4dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

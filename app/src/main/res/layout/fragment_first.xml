@@ -16,7 +16,7 @@
             android:orientation="vertical">
 
             <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/user_image"
+                android:id="@+id/doctor_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
@@ -29,11 +29,12 @@
                 app:civ_shadow_color="#8BC34A"/>
 
             <TextView
+                android:id="@+id/doctor_name"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dr. Sam Mwangi"
+                android:hint="Doctor"
                 android:textColor="#fff"
                 android:textStyle="bold"
                 android:textSize="21sp"/>
@@ -79,17 +80,19 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent">
                     <TextView
+                        android:id="@+id/middle_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Days"
+                        android:text="Medicine"
                         android:textSize="20sp"
                         />
                     <TextView
+                        android:id="@+id/middle_two"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="45"
+                        android:text="FOUND"
                         android:textStyle="bold"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:paddingTop="10dp"
                         android:textColor="@color/colorPrimaryDark"/>
 
@@ -101,19 +104,23 @@
                     android:layout_weight="1"
                     android:layout_height="match_parent">
                     <TextView
+                        android:id="@+id/last_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Remaining"
+                        android:text="Rank"
                         android:textSize="20sp"
                         />
                     <TextView
+                        android:id="@+id/last_two"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="20"
+                        android:drawablePadding="4dp"
+                        android:drawableLeft="@drawable/ic_access_time_black_24dp"
+                        android:text="NEW"
                         android:textStyle="bold"
-                        android:textSize="20sp"
+                        android:textSize="16sp"
                         android:paddingTop="10dp"
-                        android:textColor="@color/colorPrimaryDark"/>
+                        android:textColor="@color/colorAccent"/>
 
                 </LinearLayout>
             </LinearLayout>
@@ -136,13 +143,14 @@
                 android:layout_height="36dp"
                 android:src="@drawable/ic_store_black_24dp"/>
             <TextView
+                android:id="@+id/chemist"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:text="Danny Chemist"/>
-        </LinearLayout>3
+                android:hint="Danny Chemist"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_marginTop="25dp"
             android:orientation="horizontal"
@@ -154,13 +162,13 @@
                 android:layout_height="36dp"
                 android:src="@drawable/ic_phone_android_black_24dp"/>
             <TextView
+                android:id="@+id/phone"
                 android:textStyle="bold"
-
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:text="0722563684"/>
+                android:hint="Phone"/>
         </LinearLayout>
 
         <LinearLayout
@@ -174,12 +182,13 @@
                 android:layout_height="36dp"
                 android:src="@drawable/ic_place_black_24dp"/>
             <TextView
+                android:id="@+id/location"
                 android:textStyle="bold"
                 android:layout_gravity="center_vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingLeft="20dp"
-                android:text="Nairobi, Westlands"/>
+                android:hint="Nairobi"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="350dp"
-    android:layout_height="wrap_content"
+    android:layout_width="370dp"
+    android:layout_height="540dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/textColor"
-    android:padding="10dp"
+    android:padding="6dp"
     android:layout_gravity="center">
 
     <ScrollView
@@ -25,19 +25,19 @@
 
                 <TextView
                     android:id="@+id/xx"
-                    android:layout_width="match_parent"
+                    android:layout_width="300dp"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
                     android:background="@color/blackColor"
                     android:drawablePadding="10dp"
-                    android:drawableStart="@drawable/ic_mode_edit_black_24dp"
+                    android:drawableStart="@drawable/ic_phone_white"
                     android:padding="8dp"
-                    android:text="CREATE ACCOUNT"
+                    android:text="CONTACT US"
                     android:textColor="@color/textColor"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/close_dialog"
+                    android:id="@+id/close_profile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -49,107 +49,67 @@
             </RelativeLayout>
 
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/firstname_edit"
+                android:id="@+id/phone_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:iconSignifier="@drawable/ic_person_black_24dp"
                 app:primaryColor="#000000"
                 app:secondaryColor="#9e9e9e"
-                android:layout_marginBottom="13dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/textinputs"
                 app:useDenseSpacing="true"
                 app:panelBackgroundColor="#ffffff"
-                app:labelText="@string/first">
+                app:labelText="Phone No">
 
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/firstname"
+                    android:id="@+id/phone"
                     android:layout_width="match_parent"
-                    android:inputType="text"
-                    android:layout_height="wrap_content" />
-            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
-
-
-            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/lastname_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:iconSignifier="@drawable/ic_person_black_24dp"
-                app:primaryColor="#000000"
-                app:secondaryColor="#9e9e9e"
-                android:layout_marginBottom="13dp"
-                app:useDenseSpacing="true"
-                app:panelBackgroundColor="#ffffff"
-                app:labelText="@string/last">
-
-                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/lastname"
-                    android:layout_width="match_parent"
-                    android:inputType="text"
+                    android:inputType="textNoSuggestions"
                     android:layout_height="wrap_content" />
 
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
 
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/uname_edit"
+                android:id="@+id/location_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:iconSignifier="@drawable/ic_group_add_black_24dp"
                 app:primaryColor="#000000"
                 app:secondaryColor="#9e9e9e"
-                android:layout_marginBottom="13dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/textinputs"
                 app:useDenseSpacing="true"
                 app:panelBackgroundColor="#ffffff"
-                app:labelText="@string/prompt_email">
+                app:labelText="Location">
 
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/uname"
+                    android:id="@+id/location"
                     android:layout_width="match_parent"
-                    android:inputType="text"
+                    android:inputType="textNoSuggestions"
                     android:layout_height="wrap_content" />
 
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
 
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/pass_edit"
+                android:id="@+id/age_edit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:iconSignifier="@drawable/ic_https_black_24dp"
                 app:primaryColor="#000000"
                 app:secondaryColor="#9e9e9e"
-                android:layout_marginBottom="13dp"
+                android:background="@drawable/textinputs"
+                android:layout_marginBottom="15dp"
                 app:useDenseSpacing="true"
                 app:panelBackgroundColor="#ffffff"
-                app:labelText="@string/pass">
+                app:labelText="Address">
 
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/pass"
+                    android:id="@+id/age"
                     android:layout_width="match_parent"
-                    android:inputType="textPassword"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"/>
 
             </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
-
-            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/pass2_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:iconSignifier="@drawable/ic_https_black_24dp"
-                app:primaryColor="#000000"
-                app:secondaryColor="#9e9e9e"
-                android:layout_marginBottom="10dp"
-                app:useDenseSpacing="true"
-                app:panelBackgroundColor="#ffffff"
-                app:labelText="@string/repeat_pass">
-
-                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/pass2"
-                    android:layout_width="match_parent"
-                    android:inputType="textPassword"
-                    android:layout_height="wrap_content" />
-
-            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
 
 
             <RelativeLayout
@@ -157,9 +117,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
-
                 <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-                    android:id="@+id/sign_now"
+                    android:id="@+id/update_profile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button"
@@ -167,10 +126,10 @@
                     app:spinning_bar_color="#FFF"
                     app:spinning_bar_padding="6dp"
                     style="?android:textAppearanceSmall"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="1dp"
                     android:layout_gravity="right"
                     android:textColor="@color/textColor"
-                    android:text="@string/action_sign_up"
+                    android:text="ADD LOCATION"
                     android:textStyle="bold"
                     android:layout_alignParentRight="true"/>
 
@@ -179,5 +138,6 @@
 
         </LinearLayout>
     </ScrollView>
+
 
 </LinearLayout>

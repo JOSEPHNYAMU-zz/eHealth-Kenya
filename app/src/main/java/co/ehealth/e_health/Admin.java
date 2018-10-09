@@ -61,6 +61,7 @@ public class Admin extends AppCompatActivity {
     private FirebaseAuth eAuth;
     private FirebaseAuth.AuthStateListener eAuthListener;
     String userId = null;
+    Dialog contactUs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,8 @@ public class Admin extends AppCompatActivity {
         eDatabase.keepSynced(true);
         eAuth = FirebaseAuth.getInstance();
         userId = eAuth.getCurrentUser().getUid();
+        contactUs = new Dialog(this);
+        contactUs.setContentView(R.layout.contactedit);
 
 
         eAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -181,8 +184,7 @@ public class Admin extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         Admin.ViewPagerAdapter adapter = new Admin.ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new Users(), "USERS");
-        adapter.addFragment(new Second(), "DRUGS STOCK");
+        adapter.addFragment(new records(), "USERS & REQUESTS");
         adapter.addFragment(new Three(), "HEALTH NEWS");
         viewPager.setAdapter(adapter);
     }
@@ -230,12 +232,20 @@ public class Admin extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.admin_menu, menu);
         return super.onCreateOptionsMenu(menu);
+
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
+
+        if (id == R.id.action_contact) {
+
+            contactUs.show();
+
+        }
 
         switch (item.getItemId()) {
             case android.R.id.home:

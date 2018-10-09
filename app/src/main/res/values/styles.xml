@@ -17,7 +17,6 @@
         <item name="colorBackground">#d62220</item>
         <item name="solidBackground">true</item>
         <item name="strokeWidth">3dp</item>
-        <item name="strokeColor">#fff</item>
         <item name="iconStart">@drawable/ic_error_black_24dp</item>
         <item name="length">LONG</item>
         <item name="gravity">center</item>
@@ -31,7 +30,6 @@
         <item name="colorBackground">#4d9ab7</item>
         <item name="solidBackground">true</item>
         <item name="strokeWidth">3dp</item>
-        <item name="strokeColor">#fff</item>
         <item name="iconStart">@drawable/ic_info_black_24dp</item>
         <item name="length">LONG</item>
         <item name="gravity">center</item>
@@ -45,7 +43,6 @@
         <item name="colorBackground">#008000</item>
         <item name="solidBackground">true</item>
         <item name="strokeWidth">3dp</item>
-        <item name="strokeColor">#fff</item>
         <item name="iconStart">@drawable/ic_done_black_24dp</item>
         <item name="length">LONG</item>
         <item name="gravity">top</item>

@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:name=".eHealth"
@@ -32,15 +33,22 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".Settings"
-            android:label="@string/title_activity_settings" />
+            android:name=".SingleUser"
+            android:label="@string/title_activity_single_user"
+            android:theme="@style/AppTheme" />
         <activity
-            android:name=".settingsActivity"
-            android:label="@string/title_activity_settings" />
-        <activity android:name=".Admin" />
+            android:name=".Admin"
+            android:label="@string/title_activity_single_user"
+            android:theme="@style/AppTheme" />
+
+        <receiver
+            android:name=".Reminder"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity
-            android:name=".Test"
-            android:label="@string/title_activity_test"
+            android:name=".SingleBlog"
+            android:label="@string/title_activity_single_blog"
             android:theme="@style/AppTheme"></activity>
     </application>
 

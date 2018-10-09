@@ -4,18 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Three">
+    tools:context=".records">
 
-   <android.support.v7.widget.RecyclerView
-       android:id="@+id/blogList"
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       app:layout_behavior="@string/appbar_scrolling_view_behavior">
-   </android.support.v7.widget.RecyclerView>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recordList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    </android.support.v7.widget.RecyclerView>
 
     <TextView
-        android:id="@+id/no_news"
-        android:text="NO CURRENT NEWS"
+        android:id="@+id/no_records"
+        android:text="NO RECORDS FOUND"
         android:textStyle="bold"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

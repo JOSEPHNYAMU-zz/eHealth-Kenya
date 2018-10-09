@@ -26,6 +26,16 @@
             android:hint="Title"
             android:layout_height="wrap_content" />
         <TextView
+            android:id="@+id/aut"
+            android:hint="Author"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:textSize="11dp"
+            android:textStyle="bold"
+            android:layout_width="match_parent"
+            android:maxLength="230"
+            android:layout_height="wrap_content" />
+        <TextView
             android:id="@+id/bod"
             android:hint="Body"
             android:layout_marginBottom="10dp"
@@ -34,6 +44,29 @@
             android:layout_width="match_parent"
             android:maxLength="230"
             android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="5dp"
+                android:src="@drawable/ic_thumb_up_black_24dp"/>
+
+            <TextView
+                android:id="@+id/like_count"
+                android:layout_width="wrap_content"
+                android:padding="10dp"
+                android:layout_marginRight="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_toLeftOf="@+id/like"
+                android:layout_height="wrap_content" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 

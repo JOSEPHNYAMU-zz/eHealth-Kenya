@@ -48,6 +48,8 @@ dependencies {
     implementation 'com.karumi:dexter:5.0.0'
     implementation 'com.github.thunder413:DateTimeUtils:1.0'
     implementation 'com.firebaseui:firebase-ui-database:4.2.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation "com.android.support:support-compat:28.0.0"
 
 }
 

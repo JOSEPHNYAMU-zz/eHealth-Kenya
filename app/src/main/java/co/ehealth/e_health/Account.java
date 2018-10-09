@@ -25,8 +25,14 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.muddzdev.styleabletoast.StyleableToast;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 
@@ -52,6 +58,9 @@ public class Account extends AppCompatActivity {
     DatabaseReference eDatabase = FirebaseDatabase.getInstance()
             .getReference().child("Users");
 
+    DatabaseReference eDatabaseLatest = FirebaseDatabase.getInstance()
+            .getReference().child("Latest");
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
@@ -59,6 +68,7 @@ public class Account extends AppCompatActivity {
         setContentView(R.layout.activity_account);
         eDatabase.keepSynced(true);
         eAuth = FirebaseAuth.getInstance();
+        eDatabaseLatest.keepSynced(true);
 
         // Login Elements
         eUsernameView = (AutoCompleteTextView) findViewById(R.id.username);
@@ -105,7 +115,7 @@ public class Account extends AppCompatActivity {
     public void showRegister(View v) {
 
         final AutoCompleteTextView Firstname, Lastname, Pass, Uname, RepeatPass;
-        final Button cancelRegistration;
+        final TextView cancelRegistration;
         registerDialog.setContentView(R.layout.register);
 
         Firstname = (AutoCompleteTextView) registerDialog.findViewById(R.id.firstname);
@@ -115,7 +125,7 @@ public class Account extends AppCompatActivity {
         Uname = (AutoCompleteTextView) registerDialog.findViewById(R.id.uname);
         final CircularProgressButton makeAccount = (CircularProgressButton) registerDialog.findViewById(R.id.sign_now);
 
-        cancelRegistration = (Button) registerDialog.findViewById(R.id.close_dialog);
+        cancelRegistration = (TextView) registerDialog.findViewById(R.id.close_dialog);
 
         cancelRegistration.setOnClickListener(new OnClickListener() {
             @Override
@@ -189,13 +199,28 @@ public class Account extends AppCompatActivity {
 
                                         userProfile.child("Gender").setValue("");
 
-                                        userProfile.child("Role").setValue(3);
+                                        userProfile.child("Role").setValue("User");
 
                                         userProfile.child("Location").setValue("");
+
+                                        userProfile.child("Chemist").setValue("Danny");
+
+                                        userProfile.child("Phone").setValue("No");
 
                                         userProfile.child("Status").setValue("Welcome to eHealth Kenya");
 
                                         userProfile.child("Image").setValue("user.jpg");
+
+                                        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
+                                        String currentDateandTime = sdf.format(new Date());
+
+                                        userProfile.child("Joined").setValue(currentDateandTime);
+
+                                        final DatabaseReference latestData = eDatabaseLatest.child(user_id);
+
+                                        latestData.child("doctor").setValue(user_id);
+                                        latestData.child("record").setValue(user_id);
+                                        latestData.child("show").setValue("No");
 
                                         makeAccount.revertAnimation();
 

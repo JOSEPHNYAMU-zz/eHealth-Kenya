@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="370dp"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/textColor"
+    android:padding="7dp"
+    android:layout_gravity="center">
+
+    <ScrollView
+        android:id="@+id/login_form"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/email_login_form"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/top_two"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/pic"
+                    android:layout_width="fill_parent"
+                    android:layout_height="240dp"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/prescription" />
+
+                <TextView
+                    android:id="@+id/close_blog"
+                    android:layout_width="wrap_content"
+                    android:background="@color/colorRed"
+                    android:padding="8dp"
+                    android:layout_alignParentRight="true"
+                    android:drawableStart="@drawable/ic_power_settings_new_black_24dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tit"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textStyle="bold"
+                android:textSize="15dp"
+                android:hint="Title"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/aut"
+                android:hint="Author"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="11dp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:maxLength="230"
+                android:layout_height="wrap_content" />
+            <TextView
+                android:id="@+id/bod"
+                android:hint="Body"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:textSize="13dp"
+                android:layout_width="match_parent"
+                android:maxLength="230"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

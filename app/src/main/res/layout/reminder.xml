@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/textColor"
+    android:padding="7dp"
+    android:layout_gravity="center">
+
+            <LinearLayout
+                android:id="@+id/top_two"
+                android:layout_width="350dp"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+                <TimePicker
+                    android:id="@+id/timePicked"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:id="@+id/add_reminder"
+                    android:background="@drawable/button"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/textColor"
+                    android:text="ADD NEW REMINDER"
+                    android:textStyle="bold"
+                    android:layout_alignParentRight="true"/>
+
+            </LinearLayout>
+</LinearLayout>

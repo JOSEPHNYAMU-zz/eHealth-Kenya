@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="370dp"
-    android:layout_height="540dp"
+    android:layout_width="350dp"
+    android:layout_height="450dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/textColor"
     android:padding="6dp"
@@ -13,7 +13,7 @@
 
         <TextView
             android:id="@+id/sign"
-            android:layout_width="300dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:background="@color/blackColor"
@@ -51,41 +51,21 @@
             android:orientation="vertical">
 
             <ImageView
-                android:id="@+id/recordPicture"
-                android:layout_width="match_parent"
+                android:id="@+id/recordPictureAdd"
+                android:layout_width="wrap_content"
                 android:layout_marginBottom="30dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
+                android:layout_gravity="center"
                 android:layout_height="300dp"
-                app:srcCompat="@drawable/prescription" />
+                app:srcCompat="@drawable/ic_menu_camera" />
 
-
-            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/body_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="35dp"
-                android:background="@drawable/textinputs"
-                app:labelText="Description"
-                app:panelBackgroundColor="#ffffff"
-                app:primaryColor="#000000"
-                app:secondaryColor="#9e9e9e"
-                app:useDenseSpacing="true">
-
-                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:singleLine="false"
-                    android:inputType="textMultiLine" />
-
-            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
         </LinearLayout>
     </ScrollView>
     <RelativeLayout
         android:id="@+id/relativeLayout1"
         android:layout_width="fill_parent"
-        android:layout_marginTop="480dp"
+        android:layout_marginTop="380dp"
         android:layout_height="wrap_content">
 
         <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton

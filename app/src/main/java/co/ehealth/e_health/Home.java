@@ -1,11 +1,15 @@
 package co.ehealth.e_health;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,6 +21,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.text.Layout;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -34,6 +39,7 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -49,11 +55,19 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.muddzdev.styleabletoast.StyleableToast;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
+import com.github.clans.fab.FloatingActionButton;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -64,10 +78,14 @@ public class Home extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private FirebaseAuth eAuth;
-    Dialog profileDialog, statusDialog, newRecord;
+    Dialog profileDialog, statusDialog, newRecord, reminderInterface;
     private FirebaseAuth.AuthStateListener eAuthListener;
     DatabaseReference eDatabase = FirebaseDatabase.getInstance()
             .getReference().child("Users");
+    DatabaseReference eDatabaseLatest = FirebaseDatabase.getInstance()
+            .getReference().child("Latest");
+    DatabaseReference eDatabaseReminders = FirebaseDatabase.getInstance()
+            .getReference().child("Reminders");
     public static final int GALLERY_REQUEST = 1;
     public static final int GALLERY_REQUEST_RECORD = 1;
     private CircularImageView circularImageView, userImage;
@@ -78,9 +96,12 @@ public class Home extends AppCompatActivity
     private ViewPager viewPager;
     String userId = null;
     private AutoCompleteTextView StatusEdit;
-    private ImageView recordImage;
     DatabaseReference eRecordDatabase = FirebaseDatabase.getInstance()
             .getReference().child("Records");
+    FloatingActionButton reminderFab;
+    private Button addAlarmRecord;
+    ImageView recordImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +113,8 @@ public class Home extends AppCompatActivity
         eAuth = FirebaseAuth.getInstance();
         eDatabase.keepSynced(true);
         eRecordDatabase.keepSynced(true);
+        eDatabaseReminders.keepSynced(true);
+        eDatabaseLatest.keepSynced(true);
         profileDialog = new Dialog(this);
         profileDialog.setContentView(R.layout.profile);
         newRecord = new Dialog(this);
@@ -103,19 +126,55 @@ public class Home extends AppCompatActivity
         eRecordStore = FirebaseStorage.getInstance().getReference().child("Records");
         userId = eAuth.getCurrentUser().getUid();
         StatusEdit = (AutoCompleteTextView) statusDialog.findViewById(R.id.status_text);
-        eRecordDatabase.keepSynced(true);
+        recordImage = (ImageView) newRecord.findViewById(R.id.recordPictureAdd);
+
+        reminderInterface = new Dialog(this);
+        reminderInterface.setContentView(R.layout.reminder);
+        reminderFab = (FloatingActionButton) findViewById(R.id.fabReminder);
+        addAlarmRecord = (Button) reminderInterface.findViewById(R.id.add_reminder);
+
+        reminderFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                newRecord();
+
+            }
+        });
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         View headerView = navigationView.getHeaderView(0);
         final TextView Name = (TextView) headerView.findViewById(R.id.user_name);
         final TextView Status = (TextView) headerView.findViewById(R.id.status);
         userImage = (CircularImageView) headerView.findViewById(R.id.user_image);
+
+        eDatabase.child(userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if(dataSnapshot.child("Role").getValue().toString().equals("Admin")) {
+
+                    navigationView.getMenu().findItem(R.id.nav_admin).setVisible(true);
+
+                } else {
+
+                    navigationView.getMenu().findItem(R.id.nav_admin).setVisible(false);
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -123,7 +182,7 @@ public class Home extends AppCompatActivity
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        eAuthListener = new FirebaseAuth.AuthStateListener() {
+                eAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
 
@@ -140,27 +199,52 @@ public class Home extends AppCompatActivity
 
         eDatabase.child(eAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
 
                 String fullname = dataSnapshot.child("Firstname").getValue().toString().concat(" " + dataSnapshot.child("Lastname").getValue().toString());
                 Status.setText(dataSnapshot.child("Status").getValue().toString());
                 Name.setText(fullname);
                 StatusEdit.setText(dataSnapshot.child("Status").getValue().toString());
-                Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).into(userImage);
+                Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).networkPolicy(NetworkPolicy.OFFLINE).into(userImage, new Callback() {
+                    @Override
+                    public void onSuccess() {
 
-                View One, Two;
-                One = (View) profileDialog.findViewById(R.id.top_one);
-                Two = (View) profileDialog.findViewById(R.id.top_two);
+                    }
 
-                if(!dataSnapshot.child("Phone").exists()) {
+                    @Override
+                    public void onError(Exception e) {
 
-                    Two.setVisibility(View.GONE);
+                        Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).into(userImage);
+
+                    }
+                });
+
+                final TextView closeMe = (TextView) profileDialog.findViewById(R.id.close_profile);
+
+                if(dataSnapshot.child("Phone").getValue().toString().equals("No")) {
 
                     showProfile();
 
+                    closeMe.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            StyleableToast.makeText(getApplication(), "Complete your Profile SetUp", Toast.LENGTH_LONG, R.style.information).show();
+
+                        }
+                    });
+
                 } else {
 
-                    One.setVisibility(View.GONE);
+                    closeMe.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            profileDialog.dismiss();
+
+                        }
+                    });
+
                 }
 
             }
@@ -172,14 +256,28 @@ public class Home extends AppCompatActivity
         });
 
 
-        recordImage = (ImageView) newRecord.findViewById(R.id.recordPicture);
+    }
+
+    private void setAlarm(long timeInMillis) {
+
+        DatabaseReference myReminders = eDatabaseReminders.child(userId).push();
+        myReminders.child("alarmtime").setValue(timeInMillis);
+
+            AlarmManager alarmManager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+            Intent intent = new Intent(this, Reminder.class);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
+            reminderInterface.dismiss();
+            StyleableToast.makeText(this, "Reminder Successfully Set", Toast.LENGTH_LONG, R.style.success).show();
 
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new First(), "HOME");
-        adapter.addFragment(new Second(), "RECORDS");
+        final ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+        adapter.addFragment(new First(), "LATEST");
+        adapter.addFragment(new Second(), "ALL RECORDS");
         adapter.addFragment(new Three(), "HEALTH NEWS");
         viewPager.setAdapter(adapter);
     }
@@ -235,22 +333,6 @@ public class Home extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.home, menu);
-
-//        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-//        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
-//        SearchManager searchManager = (SearchManager) getSystemService(SEARCH_SERVICE);
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-
-//        MenuItem search = menu.findItem(R.id.action_search);
-//        SearchView searchView = (SearchView) search.getActionView();
-
-//        searchView.setQueryHint("SEARCH");
-//        // Assumes current activity is the searchable activity
-//        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-//        searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-
-
         return true;
 
     }
@@ -270,13 +352,25 @@ public class Home extends AppCompatActivity
 
             eDatabase.child(userId).addValueEventListener(new ValueEventListener() {
                 @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
 
                     Phone.setText(dataSnapshot.child("Phone").getValue().toString());
                     Location.setText(dataSnapshot.child("Location").getValue().toString());
                     Age.setText(dataSnapshot.child("Age").getValue().toString());
                     final CircularImageView circularImageView = (CircularImageView) profileDialog.findViewById(R.id.profile_picture);
-                    Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).into(circularImageView);
+                    Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).networkPolicy(NetworkPolicy.OFFLINE).into(circularImageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+
+                            Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).into(circularImageView);
+
+                        }
+                    });
 
                 }
 
@@ -299,6 +393,49 @@ public class Home extends AppCompatActivity
 
         }
 
+        if(id == R.id.action_search) {
+
+
+            reminderInterface.show();
+
+            final TimePicker timepicker = (TimePicker) reminderInterface.findViewById(R.id.timePicked);
+            addAlarmRecord.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Calendar calendar = Calendar.getInstance();
+
+                    if(Build.VERSION.SDK_INT >= 23) {
+                        calendar.set(
+                                calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH),
+                                timepicker.getHour(),
+                                timepicker.getMinute(),
+                                0
+                        );
+
+                    } else {
+
+                        calendar.getInstance();
+                        calendar.set(
+                                calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH),
+                                timepicker.getCurrentHour(),
+                                timepicker.getCurrentMinute(),
+                                0
+
+                        );
+                    }
+
+                    setAlarm(calendar.getTimeInMillis());
+
+                }
+            });
+
+        }
+
         if(item.getItemId() == R.id.action_logout) {
 
             logout();
@@ -310,13 +447,10 @@ public class Home extends AppCompatActivity
 
     private void newRecord() {
 
-
         newRecord.show();
 
-        final AutoCompleteTextView descInput = (AutoCompleteTextView) newRecord.findViewById(R.id.description);
         final CircularProgressButton addRecord = (CircularProgressButton) newRecord.findViewById(R.id.addNewRecord);
-        final TextView closeRecord = (TextView) newRecord.findViewById(R.id.close_record);
-        final String desc = descInput.getText().toString().trim();
+        TextView closeRecord = (TextView) newRecord.findViewById(R.id.close_record);
 
         closeRecord.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -346,6 +480,10 @@ public class Home extends AppCompatActivity
 
                     addRecord.startAnimation();
 
+                    final DatabaseReference newRec = eRecordDatabase.child(userId).push();
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyy");
+                    final String currentDateTime = sdf.format(new Date());
+
                     final StorageReference filePath = eRecordStore.child(eRecordUri.getLastPathSegment());
                     filePath.putFile(eRecordUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -355,17 +493,12 @@ public class Home extends AppCompatActivity
                                 @Override
                                 public void onSuccess(Uri uri) {
 
-                                    final DatabaseReference newRec = eRecordDatabase.child(userId).push();
-                                    newRec.child("description").setValue(desc);
                                     newRec.child("image").setValue(uri.toString());
-
-                                    addRecord.revertAnimation();
-
-                                    descInput.setText("");
-
-                                    recordImage.setBackgroundResource(R.drawable.placeholder);
-
-                                    StyleableToast.makeText(Home.this, "Record Successfully Submitted", Toast.LENGTH_LONG, R.style.success).show();
+                                    newRec.child("uid").setValue(userId);
+                                    newRec.child("added").setValue(currentDateTime);
+                                    newRec.child("icon").setValue("No");
+                                    newRec.child("status").setValue("PENDING");
+                                    newRec.child("color").setValue("RED");
 
                                 }
                             });
@@ -373,10 +506,15 @@ public class Home extends AppCompatActivity
                         }
                     });
 
+                    StyleableToast.makeText(Home.this, "Record Successfully Submitted", Toast.LENGTH_LONG, R.style.success).show();
+                    recordImage.setImageResource(R.drawable.ic_menu_camera);
+                    addRecord.revertAnimation();
+                    newRecord.dismiss();
+                    eRecordUri = null;
 
                 } else {
 
-                    StyleableToast.makeText(Home.this, "Please Upload Doctors Prescription Screenshot", Toast.LENGTH_LONG, R.style.information).show();
+                    StyleableToast.makeText(Home.this, "Please Upload Doctors Prescription Screenshot", Toast.LENGTH_LONG, R.style.error).show();
 
                 }
 
@@ -410,13 +548,55 @@ public class Home extends AppCompatActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(final MenuItem item) {
 
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_settings) {
+
+            final AutoCompleteTextView Phone, Location, Age;
+            final Button cancelRegistration;
+            Phone = (AutoCompleteTextView) profileDialog.findViewById(R.id.phone);
+            Location = (AutoCompleteTextView) profileDialog.findViewById(R.id.location);
+            Age = (AutoCompleteTextView) profileDialog.findViewById(R.id.age);
+
+            eDatabase.child(userId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+
+                    Phone.setText(dataSnapshot.child("Phone").getValue().toString());
+                    Location.setText(dataSnapshot.child("Location").getValue().toString());
+                    Age.setText(dataSnapshot.child("Age").getValue().toString());
+                    final CircularImageView circularImageView = (CircularImageView) profileDialog.findViewById(R.id.profile_picture);
+                    Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).networkPolicy(NetworkPolicy.OFFLINE).into(circularImageView, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError(Exception e) {
+
+                            Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).into(circularImageView);
+
+                        }
+                    });
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+            final CircularProgressButton updateData = (CircularProgressButton) profileDialog.findViewById(R.id.update_profile);
+            updateData.setText("UPDATE PROFILE");
+
+            showProfile();
 
         } else if (id == R.id.nav_gallery) {
+
 
         } else if (id == R.id.nav_status) {
 
@@ -432,9 +612,6 @@ public class Home extends AppCompatActivity
             accountIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
             startActivity(accountIntent);
-
-
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -555,7 +732,7 @@ public class Home extends AppCompatActivity
 
                     } else {
 
-                        StyleableToast.makeText(Home.this, "Please upload profile ic_placeholder_image", Toast.LENGTH_LONG, R.style.error).show();
+                        StyleableToast.makeText(Home.this, "Please upload profile Image", Toast.LENGTH_LONG, R.style.error).show();
 
                     }
 
@@ -615,10 +792,11 @@ public class Home extends AppCompatActivity
                     .start(this);
         }
 
-
         if(requestCode == GALLERY_REQUEST_RECORD && resultCode == RESULT_OK) {
 
-            Uri imageUri = data.getData();
+            eRecordUri = data.getData();
+            recordImage.setImageURI(eRecordUri);
+
         }
 
 
@@ -629,9 +807,6 @@ public class Home extends AppCompatActivity
             if(resultCode == RESULT_OK) {
 
                 eImageUri = result.getUri();
-                eRecordUri = result.getUri();
-
-                recordImage.setImageURI(eRecordUri);
 
                 circularImageView.setImageURI(eImageUri);
 
@@ -676,9 +851,6 @@ public class Home extends AppCompatActivity
                     StyleableToast.makeText(Home.this, "Status is Required", Toast.LENGTH_LONG, R.style.error).show();
 
                 }
-
-
-
             }
         });
 
@@ -702,5 +874,4 @@ public class Home extends AppCompatActivity
         accountIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(accountIntent);
     }
-
 }

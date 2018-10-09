@@ -22,7 +22,6 @@
     <item android:id="@+id/action_search"
         android:title="Search"
         android:tooltipText="Search eHealth"
-        android:icon="@drawable/ic_search_black_24dp"
-        app:showAsAction="ifRoom|collapseActionView"
-        app:actionViewClass="android.support.v7.widget.SearchView" />
+        android:icon="@drawable/ic_white_notify"
+        app:showAsAction="ifRoom|collapseActionView"/>
 </menu>

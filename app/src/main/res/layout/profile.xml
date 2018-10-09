@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="370dp"
-    android:layout_height="540dp"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/textColor"
-    android:padding="6dp"
+    android:padding="7dp"
     android:layout_gravity="center">
 
     <ScrollView
         android:id="@+id/login_form"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -25,7 +25,7 @@
 
                 <TextView
                     android:id="@+id/xx"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
                     android:background="@color/blackColor"
@@ -47,20 +47,6 @@
                     android:scrollHorizontally="false"
                     android:textSize="10dp" />
             </RelativeLayout>
-
-
-            <TextView
-                android:id="@+id/top_one"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:drawableStart="@drawable/ic_mode_edit_black_24dp"
-                android:drawablePadding="10dp"
-                android:textColor="@color/textColor"
-                android:background="@color/blackColor"
-                android:layout_marginBottom="15dp"
-                android:textStyle="bold"
-                android:text="ACCOUNT SET UP" />
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/profile_picture"

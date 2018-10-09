@@ -2,6 +2,7 @@ package co.ehealth.e_health;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -43,7 +44,6 @@ public class Three extends Fragment {
     String userId = null;
     private TextView visibilityText;
     private Boolean eLikeProcess = false;
-    private Dialog blog;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,9 +58,6 @@ public class Three extends Fragment {
         eDatabase.keepSynced(true);
         eUsers.keepSynced(true);
         userId = eAuth.getCurrentUser().getUid();
-        blog = new Dialog(getContext());
-        blog.setContentView(R.layout.singleblog);
-
         newsView = inflater.inflate(R.layout.fragment_three, container, false);
 
         eBlogs = (RecyclerView) newsView.findViewById(R.id.blogList);
@@ -211,126 +208,9 @@ public class Three extends Fragment {
                             @Override
                             public void onClick(View view) {
 
-                                blog.setCanceledOnTouchOutside(false);
-                                blog.show();
-                                final TextView blogTitle = (TextView) blog.findViewById(R.id.tit);
-                                TextView closeIt = (TextView) blog.findViewById(R.id.close_blog);
-                                final TextView bodyText = (TextView) blog.findViewById(R.id.bod);
-                                final TextView authors = (TextView) blog.findViewById(R.id.aut);
-                                final ImageView singleImage = (ImageView) blog.findViewById(R.id.pic);
-
-                                eDatabase.child(listID).addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-
-                                        eUsers.child(dataSnapshot.child("author").getValue().toString()).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                                String First = dataSnapshot.child("Firstname").getValue().toString();
-                                                String Last = dataSnapshot.child("Lastname").getValue().toString();
-                                                String Name = "Article By: " + First.concat(" " + Last);
-                                                authors.setText(Name);
-
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-
-                                        blogTitle.setText(dataSnapshot.child("title").getValue().toString());
-                                        bodyText.setText(dataSnapshot.child("body").getValue().toString());
-                                        Picasso.get().load(dataSnapshot.child("picture").getValue().toString()).networkPolicy(NetworkPolicy.OFFLINE).into(singleImage, new Callback() {
-                                            @Override
-                                            public void onSuccess() {
-
-                                            }
-
-                                            @Override
-                                            public void onError(Exception e) {
-
-                                                Picasso.get().load(dataSnapshot.child("picture").getValue().toString()).into(singleImage);
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-
-                                closeIt.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                        blog.setCanceledOnTouchOutside(false);
-                                        blog.show();
-                                        final TextView blogTitle = (TextView) blog.findViewById(R.id.tit);
-                                        TextView closeIt = (TextView) blog.findViewById(R.id.close_blog);
-                                        final TextView bodyText = (TextView) blog.findViewById(R.id.bod);
-                                        final TextView authors = (TextView) blog.findViewById(R.id.aut);
-                                        final ImageView singleImage = (ImageView) blog.findViewById(R.id.pic);
-
-                                        eDatabase.child(listID).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-
-                                                eUsers.child(dataSnapshot.child("author").getValue().toString()).addValueEventListener(new ValueEventListener() {
-                                                    @Override
-                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                                        String First = dataSnapshot.child("Firstname").getValue().toString();
-                                                        String Last = dataSnapshot.child("Lastname").getValue().toString();
-                                                        String Name = "Article By: " + First.concat(" " + Last);
-                                                        authors.setText(Name);
-
-                                                    }
-
-                                                    @Override
-                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                    }
-                                                });
-
-                                                blogTitle.setText(dataSnapshot.child("title").getValue().toString());
-                                                bodyText.setText(dataSnapshot.child("body").getValue().toString());
-                                                Picasso.get().load(dataSnapshot.child("picture").getValue().toString()).networkPolicy(NetworkPolicy.OFFLINE).into(singleImage, new Callback() {
-                                                    @Override
-                                                    public void onSuccess() {
-
-                                                    }
-
-                                                    @Override
-                                                    public void onError(Exception e) {
-
-                                                        Picasso.get().load(dataSnapshot.child("picture").getValue().toString()).into(singleImage);
-
-                                                    }
-                                                });
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-
-                                        closeIt.setOnClickListener(new View.OnClickListener() {
-                                            @Override
-                                            public void onClick(View view) {
-
-                                                blog.dismiss();
-
-                                            }
-                                        });
-
-                                    }
-                                });
-
+                                Intent singleUserIntent = new Intent(getContext(), Blog.class);
+                                singleUserIntent.putExtra("userID", listID);
+                                startActivity(singleUserIntent );
 
                             }
                         });
@@ -339,67 +219,9 @@ public class Three extends Fragment {
                             @Override
                             public void onClick(View view) {
 
-
-                                blog.setCanceledOnTouchOutside(false);
-                                blog.show();
-                                final TextView blogTitle = (TextView) blog.findViewById(R.id.tit);
-                                TextView closeIt = (TextView) blog.findViewById(R.id.close_blog);
-                                final TextView bodyText = (TextView) blog.findViewById(R.id.bod);
-                                final TextView authors = (TextView) blog.findViewById(R.id.aut);
-                                final ImageView singleImage = (ImageView) blog.findViewById(R.id.pic);
-
-                                eDatabase.child(listID).addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
-
-                                        eUsers.child(dataSnapshot.child("author").getValue().toString()).addValueEventListener(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                                String First = dataSnapshot.child("Firstname").getValue().toString();
-                                                String Last = dataSnapshot.child("Lastname").getValue().toString();
-                                                String Name = "Article By: " + First.concat(" " + Last);
-                                                authors.setText(Name);
-
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-
-                                        blogTitle.setText(dataSnapshot.child("title").getValue().toString());
-                                        bodyText.setText(dataSnapshot.child("body").getValue().toString());
-                                        Picasso.get().load(dataSnapshot.child("picture").getValue().toString()).networkPolicy(NetworkPolicy.OFFLINE).into(singleImage, new Callback() {
-                                            @Override
-                                            public void onSuccess() {
-
-                                            }
-
-                                            @Override
-                                            public void onError(Exception e) {
-
-                                                Picasso.get().load(dataSnapshot.child("picture").getValue().toString()).into(singleImage);
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                    }
-                                });
-
-                                closeIt.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-
-                                        blog.dismiss();
-
-                                    }
-                                });
+                                Intent singleUserIntent = new Intent(getContext(), Blog.class);
+                                singleUserIntent.putExtra("userID", listID);
+                                startActivity(singleUserIntent );
 
                             }
                         });

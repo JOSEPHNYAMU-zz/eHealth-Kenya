@@ -120,6 +120,7 @@ public class First extends Fragment {
                         }
                     });
 
+
                 } else {
 
                     eDatabaseUsers.child(dataSnapshot.child("doctor").getValue().toString()).addValueEventListener(new ValueEventListener() {

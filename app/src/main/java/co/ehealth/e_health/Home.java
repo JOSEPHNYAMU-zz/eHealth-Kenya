@@ -595,7 +595,45 @@ public class Home extends AppCompatActivity
 
             showProfile();
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_reminders) {
+
+            reminderInterface.show();
+
+            final TimePicker timepicker = (TimePicker) reminderInterface.findViewById(R.id.timePicked);
+            addAlarmRecord.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    Calendar calendar = Calendar.getInstance();
+
+                    if(Build.VERSION.SDK_INT >= 23) {
+                        calendar.set(
+                                calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH),
+                                timepicker.getHour(),
+                                timepicker.getMinute(),
+                                0
+                        );
+
+                    } else {
+
+                        calendar.getInstance();
+                        calendar.set(
+                                calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH),
+                                timepicker.getCurrentHour(),
+                                timepicker.getCurrentMinute(),
+                                0
+
+                        );
+                    }
+
+                    setAlarm(calendar.getTimeInMillis());
+
+                }
+            });
 
 
         } else if (id == R.id.nav_status) {
@@ -605,7 +643,6 @@ public class Home extends AppCompatActivity
         }else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_admin) {
-
 
             Intent accountIntent = new Intent(Home.this, Admin.class);
 

@@ -47,8 +47,8 @@
             android:exported="true" />
 
         <activity
-            android:name=".SingleBlog"
-            android:label="@string/title_activity_single_blog"
+            android:name=".Blog"
+            android:label="@string/title_activity_blog"
             android:theme="@style/AppTheme"></activity>
     </application>
 

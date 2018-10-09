@@ -113,7 +113,7 @@ public class Admin extends AppCompatActivity {
         if (getSupportActionBar() != null){
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            getSupportActionBar().setTitle("ADMIN PANEL");
+            getSupportActionBar().setTitle("ADMIN PANEL USERS");
         }
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
@@ -129,6 +129,8 @@ public class Admin extends AppCompatActivity {
             public void onPageSelected(int position) {
 
                 if (position == 0) {
+
+                    getSupportActionBar().setTitle("ADMIN PANEL USERS");
 
                     fab.setImageDrawable(ContextCompat.getDrawable(Admin.this, R.drawable.ic_bullet));
 
@@ -147,21 +149,7 @@ public class Admin extends AppCompatActivity {
 
                 if (position == 1) {
 
-                    fab.setImageDrawable(ContextCompat.getDrawable(Admin.this, R.drawable.ic_add));
-
-                    fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                            StyleableToast.makeText(Admin.this, "2", Toast.LENGTH_LONG, R.style.information).show();
-
-
-                        }
-                    });
-
-                }
-
-                if (position == 2) {
+                    getSupportActionBar().setTitle("ADMIN PANEL NEWS");
 
                     fab.setImageDrawable(ContextCompat.getDrawable(Admin.this, R.drawable.ic_add));
 
@@ -401,7 +389,6 @@ public class Admin extends AppCompatActivity {
 
             // Validate Title
             if (TextUtils.isEmpty(titles)) {
-
                 Title.setError(getString(R.string.required_title));
                 focusView = Title;
                 cancel = true;

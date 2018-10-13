@@ -117,7 +117,7 @@ public class Admin extends AppCompatActivity {
 
                         usersCount = (int) dataSnapshot.getChildrenCount();
                         StyleableToast.makeText(Admin.this, usersCount + " Users Available", Toast.LENGTH_LONG, R.style.information).show();
-                        
+
                     }
 
                     @Override

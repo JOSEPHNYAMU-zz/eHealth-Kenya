@@ -30,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.muddzdev.styleabletoast.StyleableToast;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import static android.graphics.Color.BLUE;
@@ -134,9 +136,21 @@ public class SingleUser extends AppCompatActivity {
                         holder.recordPicture.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                ImageView picha = (ImageView) screenShot.findViewById(R.id.pic_record);
+                                final ImageView picha = (ImageView) screenShot.findViewById(R.id.pic_record);
                                 screenShot.show();
-                                Picasso.get().load(model.getImage().toString()).into(picha);
+                                Picasso.get().load(model.getImage()).networkPolicy(NetworkPolicy.NO_CACHE).into(picha, new Callback() {
+                                    @Override
+                                    public void onSuccess() {
+
+                                    }
+
+                                    @Override
+                                    public void onError(Exception e) {
+
+                                        Picasso.get().load(model.getImage()).into(picha);
+
+                                    }
+                                });
                             }
                         });
 
@@ -193,7 +207,19 @@ public class SingleUser extends AppCompatActivity {
                             }
                         });
 
-                        Picasso.get().load(model.getImage().toString()).into(holder.recordPicture);
+                        Picasso.get().load(model.getImage()).networkPolicy(NetworkPolicy.NO_CACHE).into(holder.recordPicture, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError(Exception e) {
+
+                                Picasso.get().load(model.getImage()).into(holder.recordPicture);
+
+                            }
+                        });
                         holder.recordName.setText("RECORD REQUEST");
                         holder.recordDate.setText(model.getAdded().toString());
                         String iconName = model.getAdded().toString();

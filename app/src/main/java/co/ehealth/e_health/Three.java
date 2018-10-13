@@ -1,7 +1,9 @@
 package co.ehealth.e_health;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -86,6 +88,96 @@ public class Three extends Fragment {
                     protected void onBindViewHolder(@NonNull final NewsViewHolder holder, int position, @NonNull News model) {
 
                         final String listID = getRef(position).getKey();
+
+
+                                eUsers.child(userId).addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                                        if(dataSnapshot.child("Role").getValue().toString().equals("Super")) {
+
+                                            holder.deleteButton.setVisibility(View.VISIBLE);
+                                            holder.editButton.setVisibility(View.VISIBLE);
+
+                                        } else {
+
+
+                                            eDatabase.child(listID).addValueEventListener(new ValueEventListener() {
+                                                @Override
+                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                    if(dataSnapshot.child("author").getValue().toString().equals(userId)) {
+
+                                                        holder.deleteButton.setVisibility(View.VISIBLE);
+                                                        holder.editButton.setVisibility(View.VISIBLE);
+
+                                                    } else {
+
+                                                        holder.deleteButton.setVisibility(View.GONE);
+                                                        holder.editButton.setVisibility(View.GONE);
+
+                                                    }
+
+                                                }
+
+                                                @Override
+                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                }
+                                            });
+
+
+                                        }
+
+
+                                    }
+
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+                                holder.deleteButton.setOnLongClickListener(new View.OnLongClickListener() {
+                                    @Override
+                                    public boolean onLongClick(View view) {
+
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                                        builder.setCancelable(true);
+                                        builder.setTitle("DELETE THIS BLOG?");
+                                        builder.setMessage("Are sure you want to DELETE this Blog?");
+                                        builder.setPositiveButton("DELETE",
+                                                new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                        eLikes.child(listID).removeValue();
+
+                                                        eDatabase.child(listID).removeValue();
+
+                                                        StyleableToast.makeText(getContext(), "News Blog Successfully Deleted", Toast.LENGTH_LONG, R.style.success).show();
+
+                                                    }
+                                                });
+                                        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+
+
+
+                                            }
+                                        });
+
+                                        AlertDialog dialog = builder.create();
+                                        dialog.show();
+
+                                        return false;
+                                    }
+                                });
+
 
                         eDatabase.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -270,7 +362,7 @@ public class Three extends Fragment {
 
         View eView;
         TextView newsTitle, newsBody, authorText, likeCount;
-        ImageView blogPicture, likeButton;
+        ImageView blogPicture, likeButton, deleteButton, editButton;
         DatabaseReference eLikes;
         FirebaseAuth eAuth;
 
@@ -283,6 +375,8 @@ public class Three extends Fragment {
             newsBody = (TextView) itemView.findViewById(R.id.bod);
             likeCount = (TextView) itemView.findViewById(R.id.like_count);
             blogPicture = (ImageView) itemView.findViewById(R.id.pic);
+            deleteButton = (ImageView) itemView.findViewById(R.id.delete);
+            editButton = (ImageView) itemView.findViewById(R.id.edit);
             authorText = (TextView) itemView.findViewById(R.id.aut);
             likeButton = (ImageView) itemView.findViewById(R.id.like);
             eLikes = FirebaseDatabase.getInstance().getReference().child("Likes");

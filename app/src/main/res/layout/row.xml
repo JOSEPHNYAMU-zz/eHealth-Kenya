@@ -54,15 +54,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:padding="5dp"
+                android:padding="6dp"
                 android:src="@drawable/ic_thumb_up_black_24dp"/>
 
             <TextView
                 android:id="@+id/like_count"
                 android:layout_width="wrap_content"
-                android:padding="10dp"
-                android:layout_marginRight="30dp"
-                android:layout_alignParentRight="true"
+                android:padding="11dp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:text="Likes"
+                android:layout_marginRight="25dp"
+                android:layout_alignParentRight="false"
                 android:layout_toLeftOf="@+id/like"
                 android:layout_height="wrap_content" />
 

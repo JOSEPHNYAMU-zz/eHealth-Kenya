@@ -87,7 +87,7 @@ public class Home extends AppCompatActivity
     DatabaseReference eDatabaseReminders = FirebaseDatabase.getInstance()
             .getReference().child("Reminders");
     public static final int GALLERY_REQUEST = 1;
-    public static final int GALLERY_REQUEST_RECORD = 1;
+    public static final int GALLERY_REQUEST_RECORD = 5;
     private CircularImageView circularImageView, userImage;
     private Uri eImageUri = null;
     private Uri eRecordUri = null;
@@ -159,7 +159,7 @@ public class Home extends AppCompatActivity
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                if(dataSnapshot.child("Role").getValue().toString().equals("Admin")) {
+                if(!dataSnapshot.child("Role").getValue().toString().equals("User")) {
 
                     navigationView.getMenu().findItem(R.id.nav_admin).setVisible(true);
 
@@ -381,8 +381,9 @@ public class Home extends AppCompatActivity
             });
 
             final CircularProgressButton updateData = (CircularProgressButton) profileDialog.findViewById(R.id.update_profile);
-            updateData.setText("UPDATE PROFILE");
-
+            final CircularProgressButton finishData = (CircularProgressButton) profileDialog.findViewById(R.id.finish_profile);
+            finishData.setVisibility(View.GONE);
+            updateData.setVisibility(View.VISIBLE);
             showProfile();
 
         }
@@ -394,7 +395,6 @@ public class Home extends AppCompatActivity
         }
 
         if(id == R.id.action_search) {
-
 
             reminderInterface.show();
 
@@ -465,9 +465,11 @@ public class Home extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                galleryIntent.setType("image/*");
-                startActivityForResult(galleryIntent, GALLERY_REQUEST_RECORD);
+                Intent intent = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(intent, GALLERY_REQUEST_RECORD);
             }
         });
 
@@ -591,8 +593,9 @@ public class Home extends AppCompatActivity
             });
 
             final CircularProgressButton updateData = (CircularProgressButton) profileDialog.findViewById(R.id.update_profile);
-            updateData.setText("UPDATE PROFILE");
-
+            final CircularProgressButton finishData = (CircularProgressButton) profileDialog.findViewById(R.id.finish_profile);
+            finishData.setVisibility(View.GONE);
+            updateData.setVisibility(View.VISIBLE);
             showProfile();
 
         } else if (id == R.id.nav_reminders) {
@@ -669,20 +672,23 @@ public class Home extends AppCompatActivity
         final StickySwitch Gender = (StickySwitch) profileDialog.findViewById(R.id.gender);
 
         final CircularProgressButton updateData = (CircularProgressButton) profileDialog.findViewById(R.id.update_profile);
+        final CircularProgressButton finishData = (CircularProgressButton) profileDialog.findViewById(R.id.finish_profile);
         final CircularImageView circularImageView = (CircularImageView) profileDialog.findViewById(R.id.profile_picture);
 
         circularImageView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
 
-                Intent galleryIntent = new Intent();
-                galleryIntent.setAction(Intent.ACTION_GET_CONTENT);
-                galleryIntent.setType("image/*");
-                startActivityForResult(galleryIntent, GALLERY_REQUEST);
+                Intent intent = new Intent(
+                        Intent.ACTION_PICK,
+                        android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+                startActivityForResult(intent, GALLERY_REQUEST);
 
                 return true;
             }
         });
+
 
         circularImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -705,6 +711,109 @@ public class Home extends AppCompatActivity
 
         profileDialog.setCanceledOnTouchOutside(false);
         profileDialog.show();
+
+        finishData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Clear Errors
+                Phone.setError(null);
+                Location.setError(null);
+                Age.setError(null);
+
+                boolean cancel = false;
+                View focusView = null;
+
+                final String phone = Phone.getText().toString();
+                final String location = Location.getText().toString();
+                final String age = Age.getText().toString();
+                final String gender = Gender.getText().toString();
+
+                if (!TextUtils.isEmpty(phone) && !TextUtils.isEmpty(location) &&
+                        !TextUtils.isEmpty(age)) {
+
+                    if(eImageUri != null) {
+
+                        // Check Phone Length
+                        if (isPhoneValid(phone)) {
+
+                            Phone.setError(getString(R.string.phone_length));
+                            Phone.requestFocus();
+                            cancel = true;
+
+                        } else {
+
+                            updateData.startAnimation();
+
+                            final StorageReference filePath = eImageStore.child(eImageUri.getLastPathSegment());
+
+                            filePath.putFile(eImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                @Override
+                                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                                    filePath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                        @Override
+                                        public void onSuccess(Uri uri) {
+
+                                            eDatabase.child(userId).child("Phone").setValue(phone);
+                                            eDatabase.child(userId).child("Location").setValue(location);
+                                            eDatabase.child(userId).child("Age").setValue(age);
+                                            eDatabase.child(userId).child("Gender").setValue(gender);
+                                            eDatabase.child(userId).child("Image").setValue(uri.toString());
+
+                                            updateData.revertAnimation();
+                                            profileDialog.dismiss();
+                                            StyleableToast.makeText(Home.this, "Profile Successfully Updated", Toast.LENGTH_LONG, R.style.success).show();
+
+                                        }
+                                    });
+
+                                }
+                            });
+
+                        }
+
+                    } else {
+
+                        StyleableToast.makeText(Home.this, "Upload Profile Picture", Toast.LENGTH_LONG, R.style.error).show();
+
+                    }
+
+                } else {
+
+                    // Validate Phone
+                    if (TextUtils.isEmpty(phone)) {
+
+                        Phone.setError(getString(R.string.required_phone));
+                        focusView = Phone;
+                        cancel = true;
+
+                    }
+
+
+                    // Validate Location
+                    if (TextUtils.isEmpty(location)) {
+
+                        Location.setError(getString(R.string.required_location));
+                        focusView = Location;
+                        cancel = true;
+
+                    }
+
+
+                    // Validate Age
+                    if (TextUtils.isEmpty(age)) {
+
+                        Age.setError(getString(R.string.required_age));
+                        focusView = Age;
+                        cancel = true;
+
+                    }
+
+                }
+
+            }
+        });
 
         updateData.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -757,7 +866,7 @@ public class Home extends AppCompatActivity
 
                                             updateData.revertAnimation();
                                             profileDialog.dismiss();
-                                            StyleableToast.makeText(Home.this, "Profile completed, Welcome to eHealth", Toast.LENGTH_LONG, R.style.success).show();
+                                            StyleableToast.makeText(Home.this, "Profile Successfully Updated", Toast.LENGTH_LONG, R.style.success).show();
 
                                         }
                                     });
@@ -769,7 +878,29 @@ public class Home extends AppCompatActivity
 
                     } else {
 
-                        StyleableToast.makeText(Home.this, "Please upload profile Image", Toast.LENGTH_LONG, R.style.error).show();
+
+                        // Check Phone Length
+                        if (isPhoneValid(phone)) {
+
+                            Phone.setError(getString(R.string.phone_length));
+                            Phone.requestFocus();
+                            cancel = true;
+
+                        } else {
+
+                            updateData.startAnimation();
+
+                            eDatabase.child(userId).child("Phone").setValue(phone);
+                            eDatabase.child(userId).child("Location").setValue(location);
+                            eDatabase.child(userId).child("Age").setValue(age);
+                            eDatabase.child(userId).child("Gender").setValue(gender);
+
+                            updateData.revertAnimation();
+                            profileDialog.dismiss();
+                            StyleableToast.makeText(Home.this, "Profile Successfully Updated", Toast.LENGTH_LONG, R.style.success).show();
+
+
+                        }
 
                     }
 
@@ -821,9 +952,8 @@ public class Home extends AppCompatActivity
 
         if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
 
-            Uri imageUri = data.getData();
-
-            CropImage.activity(imageUri)
+            eImageUri = data.getData();
+            CropImage.activity(eImageUri)
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1, 1)
                     .start(this);
@@ -844,7 +974,6 @@ public class Home extends AppCompatActivity
             if(resultCode == RESULT_OK) {
 
                 eImageUri = result.getUri();
-
                 circularImageView.setImageURI(eImageUri);
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
@@ -899,10 +1028,7 @@ public class Home extends AppCompatActivity
 
             }
         });
-
-
     }
-
 
     private void logout() {
 

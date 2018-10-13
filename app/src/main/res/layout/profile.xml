@@ -163,7 +163,23 @@
                     android:layout_marginTop="1dp"
                     android:layout_gravity="right"
                     android:textColor="@color/textColor"
-                    android:text="@string/action_complete"
+                    android:text="UPDATE PROFILE"
+                    android:textStyle="bold"
+                    android:layout_alignParentRight="true"/>
+
+                <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
+                    android:id="@+id/finish_profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button"
+                    app:spinning_bar_width="4dp"
+                    app:spinning_bar_color="#FFF"
+                    app:spinning_bar_padding="6dp"
+                    style="?android:textAppearanceSmall"
+                    android:layout_marginTop="1dp"
+                    android:layout_gravity="right"
+                    android:textColor="@color/textColor"
+                    android:text="GET STARTED"
                     android:textStyle="bold"
                     android:layout_alignParentRight="true"/>
 

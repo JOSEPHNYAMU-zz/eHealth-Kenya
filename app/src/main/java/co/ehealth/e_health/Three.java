@@ -44,6 +44,7 @@ public class Three extends Fragment {
     String userId = null;
     private TextView visibilityText;
     private Boolean eLikeProcess = false;
+    private int likesCount = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -118,7 +119,6 @@ public class Three extends Fragment {
                                 String First = dataSnapshot.child("Firstname").getValue().toString();
                                 String Last = dataSnapshot.child("Lastname").getValue().toString();
                                 String Name = "Article By: " + First.concat(" " + Last);
-
                                 holder.authorText.setText(Name);
 
                             }
@@ -150,19 +150,41 @@ public class Three extends Fragment {
                         holder.setLikeButton(listID);
 
 
-//                        eLikes.child(listID)
-//                                .addListenerForSingleValueEvent(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(DataSnapshot dataSnapshot) {
-//
-//                                        int size = (int) dataSnapshot.getChildrenCount();
-//                                        holder.likeCount.setText(size);
-//                                    }
-//                                    @Override
-//                                    public void onCancelled(DatabaseError databaseError) {
-//
-//                                    }
-//                                });
+
+
+                        eLikes.child(listID).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                if(dataSnapshot.exists()) {
+
+                                    likesCount = (int) dataSnapshot.getChildrenCount();
+
+                                    if(Integer.toString(likesCount).equals("1")) {
+
+                                        holder.likeCount.setText(Integer.toString(likesCount) + " Like");
+
+                                    } else {
+
+                                        holder.likeCount.setText(Integer.toString(likesCount) + " Likes");
+
+                                    }
+
+
+                                } else {
+
+                                    holder.likeCount.setText("0 Likes");
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
 
 
                         holder.likeButton.setOnClickListener(new View.OnClickListener() {

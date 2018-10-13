@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="370dp"
-    android:layout_height="540dp"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/textColor"
     android:padding="6dp"
@@ -25,19 +25,19 @@
 
                 <TextView
                     android:id="@+id/xx"
-                    android:layout_width="300dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="15dp"
                     android:background="@color/blackColor"
                     android:drawablePadding="10dp"
                     android:drawableStart="@drawable/ic_phone_white"
                     android:padding="8dp"
-                    android:text="CONTACT US"
+                    android:text="ADD PLACES"
                     android:textColor="@color/textColor"
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/close_profile"
+                    android:id="@+id/close_contact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -49,7 +49,7 @@
             </RelativeLayout>
 
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/phone_edit"
+                android:id="@+id/phone_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:primaryColor="#000000"
@@ -61,7 +61,7 @@
                 app:labelText="Phone No">
 
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/phone"
+                    android:id="@+id/phonePlus"
                     android:layout_width="match_parent"
                     android:inputType="textNoSuggestions"
                     android:layout_height="wrap_content" />
@@ -70,7 +70,7 @@
 
 
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/location_edit"
+                android:id="@+id/location_add"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:primaryColor="#000000"
@@ -82,7 +82,7 @@
                 app:labelText="Location">
 
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/location"
+                    android:id="@+id/locationPlus"
                     android:layout_width="match_parent"
                     android:inputType="textNoSuggestions"
                     android:layout_height="wrap_content" />
@@ -91,7 +91,7 @@
 
 
             <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/age_edit"
+                android:id="@+id/address_edi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:primaryColor="#000000"
@@ -103,7 +103,7 @@
                 app:labelText="Address">
 
                 <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/age"
+                    android:id="@+id/addressPlus"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"/>
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content">
 
                 <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-                    android:id="@+id/update_profile"
+                    android:id="@+id/addPlace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button"

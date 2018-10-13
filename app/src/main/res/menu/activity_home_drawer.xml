@@ -24,21 +24,15 @@
     <item android:title="OTHERS">
         <menu>
             <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_place_black_24dp"
+                android:id="@+id/nav_contact"
+                android:icon="@drawable/ic_phone_android_black_24dp"
                 android:text="7dp"
-                android:title="FIND US" />
+                android:title="CONTACT US" />
             <item
                 android:id="@+id/nav_admin"
                 android:icon="@drawable/ic_people_black_24dp"
                 android:text="7dp"
                 android:title="ADMIN PORTAL" />
-
-            <item
-                android:id="@+id/nav_contact"
-                android:icon="@drawable/ic_phone_android_black_24dp"
-                android:text="7dp"
-                android:title="CONTACT US" />
         </menu>
     </item>
 

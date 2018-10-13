@@ -43,13 +43,12 @@ public class SingleUser extends AppCompatActivity {
             .getReference().child("Users");
     DatabaseReference eDatabaseLatest = FirebaseDatabase.getInstance()
             .getReference().child("Latest");
-    private TextView userName, Location, Phone, Age;
-    private CircularImageView circularImageView;
     private RecyclerView eRecords;
     private Dialog screenShot;
     private FirebaseAuth eAuth;
     String userId = null;
     String userKey = null;
+    private int recordsCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +58,6 @@ public class SingleUser extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         userKey =  getIntent().getExtras().getString("userID");
-//        userName = (TextView) findViewById(R.id.user_name);
-//        circularImageView = (CircularImageView) findViewById(R.id.user_image);
-//        Location = (TextView) findViewById(R.id.loc);
-//        Phone = (TextView) findViewById(R.id.phone);
-//        Age = (TextView) findViewById(R.id.age);
         eRecords = (RecyclerView) findViewById(R.id.requestList);
         eRecords.setHasFixedSize(true);
         eRecords.setLayoutManager(new LinearLayoutManager(this));
@@ -88,15 +82,6 @@ public class SingleUser extends AppCompatActivity {
                     getSupportActionBar().setTitle(dataSnapshot.child("Firstname").getValue().toString());
                 }
 
-//                String First = dataSnapshot.child("Firstname").getValue().toString();
-//                String Last = dataSnapshot.child("Lastname").getValue().toString();
-//                String Name = First.concat(" " + Last);
-//                userName.setText(Name);
-//                Picasso.get().load(dataSnapshot.child("Image").getValue().toString()).into(circularImageView);
-//                Age.setText(dataSnapshot.child("Age").getValue().toString());
-//                Phone.setText(dataSnapshot.child("Phone").getValue().toString());
-//                Location.setText(dataSnapshot.child("Location").getValue().toString());
-
             }
 
             @Override
@@ -110,7 +95,20 @@ public class SingleUser extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //FAB
+          eRecordDatabase.addValueEventListener(new ValueEventListener() {
+              @Override
+              public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                  recordsCount = (int) dataSnapshot.getChildrenCount();
+                  StyleableToast.makeText(SingleUser.this, recordsCount + " Records Available", Toast.LENGTH_LONG, R.style.information).show();
+
+              }
+
+              @Override
+              public void onCancelled(@NonNull DatabaseError databaseError) {
+
+              }
+          });
 
 
             }

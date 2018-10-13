@@ -48,77 +48,63 @@
                     android:textSize="10dp" />
             </RelativeLayout>
 
-            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/phone_add"
+            <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:primaryColor="#000000"
-                app:secondaryColor="#9e9e9e"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/textinputs"
-                app:useDenseSpacing="true"
-                app:panelBackgroundColor="#ffffff"
-                app:labelText="Phone No">
+                android:layout_height="wrap_content">
 
-                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/phonePlus"
-                    android:layout_width="match_parent"
-                    android:inputType="textNoSuggestions"
-                    android:layout_height="wrap_content" />
-
-            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
-
-
-            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/location_add"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:primaryColor="#000000"
-                app:secondaryColor="#9e9e9e"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/textinputs"
-                app:useDenseSpacing="true"
-                app:panelBackgroundColor="#ffffff"
-                app:labelText="Location">
-
-                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/locationPlus"
-                    android:layout_width="match_parent"
-                    android:inputType="textNoSuggestions"
-                    android:layout_height="wrap_content" />
-
-            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
-
-
-            <studio.carbonylgroup.textfieldboxes.TextFieldBoxes
-                android:id="@+id/address_edi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:primaryColor="#000000"
-                app:secondaryColor="#9e9e9e"
-                android:background="@drawable/textinputs"
-                android:layout_marginBottom="15dp"
-                app:useDenseSpacing="true"
-                app:panelBackgroundColor="#ffffff"
-                app:labelText="Address">
-
-                <studio.carbonylgroup.textfieldboxes.ExtendedEditText
-                    android:id="@+id/addressPlus"
+                <AutoCompleteTextView
+                    android:id="@+id/add_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textMultiLine"/>
+                    android:hint="Phone Number"
+                    android:inputType="phone"
+                    android:layout_marginBottom="15dp"
+                    android:maxLines="1"
+                    android:singleLine="true" />
 
-            </studio.carbonylgroup.textfieldboxes.TextFieldBoxes>
+            </android.support.design.widget.TextInputLayout>
 
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/add_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Location"
+                    android:inputType="text"
+                    android:layout_marginBottom="15dp"
+                    android:maxLines="1"
+                    android:singleLine="true" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <AutoCompleteTextView
+                    android:id="@+id/add_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Address"
+                    android:inputType="text"
+                    android:layout_marginBottom="15dp"
+                    android:maxLines="1"
+                    android:singleLine="false" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <RelativeLayout
-                android:id="@+id/relativeLayout1"
+                android:id="@+id/layoutBottom"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content">
 
                 <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
-                    android:id="@+id/addPlace"
+                    android:id="@+id/add_place"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/button"

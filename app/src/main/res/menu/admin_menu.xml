@@ -3,20 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_locations"
+        android:id="@+id/action_places"
         android:orderInCategory="100"
-        android:title="Locations"
+        android:title="Places"
         app:showAsAction="never" />
-
     <item
         android:id="@+id/action_logout"
         android:orderInCategory="100"
         android:title="@string/action_logout"
         app:showAsAction="never" />
 
-    <item android:id="@+id/action_contact"
-        android:title="Contact"
-        android:tooltipText="Contact Us"
-        android:icon="@drawable/ic_place_white"
-        app:showAsAction="ifRoom|collapseActionView"/>
 </menu>

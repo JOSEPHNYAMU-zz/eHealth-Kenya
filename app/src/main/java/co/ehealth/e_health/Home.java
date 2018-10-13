@@ -643,7 +643,11 @@ public class Home extends AppCompatActivity
 
             showStatus();
 
-        }else if (id == R.id.nav_share) {
+        }else if (id == R.id.nav_contact) {
+
+            Intent accountIntent = new Intent(Home.this, Location.class);
+            startActivity(accountIntent);
+
 
         } else if (id == R.id.nav_admin) {
 

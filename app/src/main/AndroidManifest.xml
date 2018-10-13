@@ -43,13 +43,16 @@
         <receiver
             android:name=".Reminder"
             android:enabled="true"
-            android:exported="true">
-        </receiver>
+            android:exported="true"></receiver>
 
         <activity
             android:name=".Blog"
             android:label="@string/title_activity_blog"
-            android:theme="@style/AppTheme"/>
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".Location"
+            android:label="@string/title_activity_location"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

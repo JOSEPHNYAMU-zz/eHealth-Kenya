@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,13 +48,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import studio.carbonylgroup.textfieldboxes.TextFieldBoxes;
 
 public class Admin extends AppCompatActivity {
 
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private FloatingActionButton fab;
-    Dialog newsEdit;
+    Dialog newsEdit, placeDialog;
     private Uri eImageUri = null;
     private static final int GALLERY_REQUEST = 1;
     private ImageView newImage;
@@ -69,8 +71,10 @@ public class Admin extends AppCompatActivity {
     private FirebaseAuth eAuth;
     private FirebaseAuth.AuthStateListener eAuthListener;
     String userId = null;
-    Dialog contactUs;
     private int usersCount = 0;
+    private int placesCount = 0;
+    TextView closeContact;
+    CircularProgressButton addData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +82,8 @@ public class Admin extends AppCompatActivity {
         setContentView(R.layout.activity_admin);
         newsEdit = new Dialog(this);
         newsEdit.setContentView(R.layout.newsedit);
+        placeDialog = new Dialog(this);
+        placeDialog.setContentView(R.layout.places);
         newImage = (ImageView) newsEdit.findViewById(R.id.blogImage);
         Title = (AutoCompleteTextView) newsEdit.findViewById(R.id.title_name);
         Body = (AutoCompleteTextView) newsEdit.findViewById(R.id.body);
@@ -88,8 +94,7 @@ public class Admin extends AppCompatActivity {
         eDatabaseUsers.keepSynced(true);
         eAuth = FirebaseAuth.getInstance();
         userId = eAuth.getCurrentUser().getUid();
-        contactUs = new Dialog(this);
-        contactUs.setContentView(R.layout.contactedit);
+        addData = (CircularProgressButton) placeDialog.findViewById(R.id.add_place);
 
         eAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -105,6 +110,7 @@ public class Admin extends AppCompatActivity {
 
             }
         };
+
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -153,7 +159,7 @@ public class Admin extends AppCompatActivity {
 
                 if (position == 0) {
 
-                    getSupportActionBar().setTitle("ADMIN PANEL USERS");
+                    getSupportActionBar().setTitle("ADMIN USERS");
 
                     fab.setImageDrawable(ContextCompat.getDrawable(Admin.this, R.drawable.ic_bullet));
 
@@ -161,7 +167,20 @@ public class Admin extends AppCompatActivity {
                         @Override
                         public void onClick(View view) {
 
-                            StyleableToast.makeText(Admin.this, "1", Toast.LENGTH_LONG, R.style.information).show();
+                                    eDatabaseUsers.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                            usersCount = (int) dataSnapshot.getChildrenCount();
+                                            StyleableToast.makeText(Admin.this, usersCount + " Users Available", Toast.LENGTH_LONG, R.style.information).show();
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
 
 
                         }
@@ -172,7 +191,7 @@ public class Admin extends AppCompatActivity {
 
                 if (position == 1) {
 
-                    getSupportActionBar().setTitle("ADMIN PANEL NEWS");
+                    getSupportActionBar().setTitle("ADMIN NEWS");
 
                     fab.setImageDrawable(ContextCompat.getDrawable(Admin.this, R.drawable.ic_add));
 
@@ -187,8 +206,108 @@ public class Admin extends AppCompatActivity {
 
                 }
 
+                if (position == 2) {
+
+                    getSupportActionBar().setTitle("ADMIN LOCATIONS");
+
+                    eDatabaseUsers.child(userId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            if(dataSnapshot.child("Role").getValue().toString().equals("Super")) {
+
+                                toolbar.getMenu().findItem(R.id.action_places).setVisible(true);
+
+                            } else {
+
+                                toolbar.getMenu().findItem(R.id.action_places).setVisible(false);
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+
+                    fab.setImageDrawable(ContextCompat.getDrawable(Admin.this, R.drawable.ic_add));
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                            eDatabasePlaces.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                    placesCount = (int) dataSnapshot.getChildrenCount();
+                                    StyleableToast.makeText(Admin.this, usersCount + " Locations Found", Toast.LENGTH_LONG, R.style.information).show();
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+                            });
+
+                        }
+                    });
+
+                }
+
             }
         });
+
+    }
+
+    private void newLocation() {
+        placeDialog.setCanceledOnTouchOutside(false);
+        placeDialog.show();
+        final DatabaseReference places = eDatabasePlaces.push();
+
+        closeContact = (TextView) placeDialog.findViewById(R.id.close_contact);
+        final AutoCompleteTextView phoneInput = (AutoCompleteTextView) placeDialog.findViewById(R.id.add_phone);
+        final AutoCompleteTextView locationInput = (AutoCompleteTextView) placeDialog.findViewById(R.id.add_location);
+        final AutoCompleteTextView addressInput = (AutoCompleteTextView) placeDialog.findViewById(R.id.add_address);
+
+        addData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(!TextUtils.isEmpty(phoneInput.getText().toString()) && !TextUtils.isEmpty(locationInput.getText().toString()) && !TextUtils.isEmpty(addressInput.getText().toString())) {
+
+                    places.child("phone").setValue(phoneInput.getText().toString());
+                    places.child("location").setValue(locationInput.getText().toString());
+                    places.child("address").setValue(addressInput.getText().toString());
+
+                    phoneInput.setText("");
+                    locationInput.setText("");
+                    addressInput.setText("");
+
+                    StyleableToast.makeText(Admin.this, "Location Added Successfully", Toast.LENGTH_LONG, R.style.success).show();
+
+                } else {
+
+                    StyleableToast.makeText(Admin.this, "All Fields are Required", Toast.LENGTH_LONG, R.style.error).show();
+
+                }
+
+            }
+        });
+
+        closeContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                placeDialog.dismiss();
+
+            }
+        });
+
 
     }
 
@@ -197,6 +316,7 @@ public class Admin extends AppCompatActivity {
         Admin.ViewPagerAdapter adapter = new Admin.ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new records(), "USERS & REQUESTS");
         adapter.addFragment(new Three(), "HEALTH NEWS");
+        adapter.addFragment(new Locations(), "LOCATIONS");
         viewPager.setAdapter(adapter);
     }
 
@@ -249,60 +369,15 @@ public class Admin extends AppCompatActivity {
 
         int id = item.getItemId();
 
-        if (id == R.id.action_contact) {
+        if(item.getItemId() == R.id.action_logout) {
 
-            contactUs.setCanceledOnTouchOutside(false);
-            contactUs.show();
+            logout();
 
-            TextView closeContact = (TextView) contactUs.findViewById(R.id.close_contact);
+        }
 
-            final AutoCompleteTextView newPhone = (AutoCompleteTextView) contactUs.findViewById(R.id.phonePlus);
-            final AutoCompleteTextView newLocation = (AutoCompleteTextView) contactUs.findViewById(R.id.locationPlus);
-            final AutoCompleteTextView newAddress = (AutoCompleteTextView) contactUs.findViewById(R.id.addressPlus);
-            final CircularProgressButton addData = (CircularProgressButton) contactUs.findViewById(R.id.addPlace);
+        if(item.getItemId() == R.id.action_places) {
 
-            final String phone = newPhone.getText().toString();
-            final String location = newLocation.getText().toString();
-            final String address =  newAddress.getText().toString();
-
-            addData.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if(!TextUtils.isEmpty(phone) && !TextUtils.isEmpty(address) && !TextUtils.isEmpty(location)) {
-
-                        addData.startAnimation();
-
-                        DatabaseReference places = eDatabasePlaces.push();
-                        places.child("phone").setValue(phone);
-                        places.child("location").setValue(location);
-                        places.child("address").setValue(address);
-
-                        StyleableToast.makeText(Admin.this, "Location Successfully Added", Toast.LENGTH_LONG, R.style.success).show();
-
-                        newPhone.setText("");
-                        newLocation.setText("");
-                        newAddress.setText("");
-
-                        addData.revertAnimation();
-
-                    } else {
-
-                        StyleableToast.makeText(Admin.this, "Please Add all Fields", Toast.LENGTH_LONG, R.style.error).show();
-
-                    }
-                }
-            });
-
-
-            closeContact.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    contactUs.dismiss();
-
-                }
-            });
+            newLocation();
 
         }
 
@@ -479,5 +554,13 @@ public class Admin extends AppCompatActivity {
 
         }
 
+    }
+
+    private void logout() {
+
+        eAuth.signOut();
+        Intent accountIntent = new Intent(Admin.this, Account.class);
+        accountIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(accountIntent);
     }
 }
